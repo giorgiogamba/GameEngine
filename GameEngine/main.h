@@ -2,6 +2,13 @@
 #include <stdio.h>
 #include <iostream>
 
+#pragma region Definitions
+
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
+
+#pragma endregion
+
 int main(void)
 {
     GLFWwindow* window;
@@ -14,7 +21,7 @@ int main(void)
     }
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Game Engine", NULL, NULL);
     if (!window)
     {
         std::cout << "Unable to create OpenGL window" << std::endl;
