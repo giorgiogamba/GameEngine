@@ -1,4 +1,6 @@
 #include <GLFW/glfw3.h>
+#include <stdio.h>
+#include <iostream>
 
 int main(void)
 {
@@ -6,12 +8,16 @@ int main(void)
 
     /* Initialize the library */
     if (!glfwInit())
+    {
+        std::cout << "Unable to initialize OpenGL screen" << std::endl;
         return -1;
+    }
 
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
     if (!window)
     {
+        std::cout << "Unable to create OpenGL window" << std::endl;
         glfwTerminate();
         return -1;
     }
