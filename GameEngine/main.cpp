@@ -317,9 +317,13 @@ int main(void)
 
     glBindVertexArray(0);
 
+    // Lights
+    glm::vec3 LightsPosition(0.f, 0.f, 2.f);
+
     glUniformMatrix4fv(glGetUniformLocation(program, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
     glUniformMatrix4fv(glGetUniformLocation(program, "ViewMatrix"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
     glUniformMatrix4fv(glGetUniformLocation(program, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
+    glUniform3fv(glGetUniformLocation(program, "lightPos"), 1, glm::value_ptr(LightsPosition));
     while (!glfwWindowShouldClose(window))
     {
         /* Poll for and process events */
