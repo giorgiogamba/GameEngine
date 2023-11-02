@@ -1,3 +1,4 @@
+// Copyright Giorgio Gamba
 #include <GLFW/glfw3.h>
 bool loadShaders(GLuint& program)
 {
