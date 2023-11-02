@@ -184,6 +184,21 @@ glm::mat4 CreateViewMatrix()
     return glm::lookAt(CameraPosition, CameraPosition + CameraFrontVector, CameraUpVector);
 }
 
+glm::mat4 CreatePerspectiveMatrix(const int FrameBufferWidth, const int FrameBufferHeight)
+{
+    float fov = 90.f;
+    float ZNearPlane = 0.1f;
+    float  ZFarPlane = 500.f;
+    glm::mat4 ProjectionMatrix(1.f);
+    ProjectionMatrix = glm::perspective
+    (glm::radians(fov)                                             // Field of view
+        , static_cast<float>(FrameBufferWidth) / FrameBufferHeight     // Aspect Ratio
+        , ZNearPlane
+        , ZFarPlane);
+
+    return ProjectionMatrix;
+}
+
 int main(void)
 {
     GLFWwindow* window;
