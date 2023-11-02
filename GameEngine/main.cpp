@@ -155,6 +155,14 @@ GLuint CreateTexture()
 
     return tex;
 }
+
+void ApplyTexture(GLuint program, GLuint texture)
+{
+    glUniform1i(glGetUniformLocation(program, "texture"), 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+}
+
 int main(void)
 {
     GLFWwindow* window;
