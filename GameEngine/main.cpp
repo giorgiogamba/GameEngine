@@ -6,7 +6,10 @@ int main(void)
 
     /* Initialize the library */
     if (!glfwInit())
+    {
+        std::cout << "Unable to initialize OpenGL screen" << std::endl;
         return -1;
+    }
 
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Game Engine", NULL, NULL);
