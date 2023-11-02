@@ -294,14 +294,30 @@ int main(void)
     glUniformMatrix4fv(glGetUniformLocation(program, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
     while (!glfwWindowShouldClose(window))
     {
+        /* Poll for and process events */
+        glfwPollEvents();
         /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+        glUseProgram(program);
+
+        modelMatrix = CreateModelMatrix(position, rotation, scale);
+        glUniformMatrix4fv(glGetUniformLocation(program, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
+
+        // Update window sizxe caching
+        glfwGetFramebufferSize(window, &FrameBufferWidth, &FramebufferHeight);
+        ProjectionMatrix = CreatePerspectiveMatrix(FrameBufferWidth, FramebufferHeight);
+        glUniformMatrix4fv(glGetUniformLocation(program, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
+
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
+        glFlush();
 
         /* Poll for and process events */
         glfwPollEvents();
+        glUseProgram(0);
     }
 
     glfwTerminate();
