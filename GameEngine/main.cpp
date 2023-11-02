@@ -277,6 +277,9 @@ int main(void)
         return -1;
     }
 
+    int FrameBufferWidth = 0, FramebufferHeight = 0;
+    glfwGetFramebufferSize(window, &FrameBufferWidth, &FramebufferHeight);
+
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
@@ -341,6 +344,8 @@ int main(void)
 
     glBindVertexArray(0);
 
+    GLuint texture = CreateTexture();
+
     // Model matrix creation
     // Collects all the transform informations for the given object
     // Remember that matrices multiply from right to left
@@ -356,14 +361,28 @@ int main(void)
     // Lights
     glm::vec3 LightsPosition(0.f, 0.f, 2.f);
 
+
+    // Send matrix to the GPU (matches vertex shader argument)
+    glUseProgram(program);
+
+    // Model matrix application
     glUniformMatrix4fv(glGetUniformLocation(program, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
     glUniformMatrix4fv(glGetUniformLocation(program, "ViewMatrix"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
     glUniformMatrix4fv(glGetUniformLocation(program, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
+
     glUniform3fv(glGetUniformLocation(program, "lightPos"), 1, glm::value_ptr(LightsPosition));
+    glm::vec3 CameraPosition(0.f, 0.f, 2.f);
+    glUniform3fv(glGetUniformLocation(program, "cameraPos"), 1, glm::value_ptr(CameraPosition));
+
+    glUseProgram(0);
+
+    // Rendering loop
     while (!glfwWindowShouldClose(window))
     {
         /* Poll for and process events */
         glfwPollEvents();
+        updateInput(window, position, rotation, scale);
+
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -378,14 +397,20 @@ int main(void)
         ProjectionMatrix = CreatePerspectiveMatrix(FrameBufferWidth, FramebufferHeight);
         glUniformMatrix4fv(glGetUniformLocation(program, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
 
+        ApplyTexture(program, texture);
+
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
         glFlush();
 
-        /* Poll for and process events */
-        glfwPollEvents();
+        // Reset state
+        glBindVertexArray(0);
         glUseProgram(0);
+        glActiveTexture(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     glfwTerminate();
