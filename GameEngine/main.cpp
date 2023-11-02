@@ -317,6 +317,10 @@ int main(void)
 
     glBindVertexArray(0);
 
+    glm::mat4 modelMatrix = CreateModelMatrix(position, rotation, scale);
+    glm::mat4 ViewMatrix = CreateViewMatrix();
+    glm::mat4 ProjectionMatrix = CreatePerspectiveMatrix(FrameBufferWidth, FramebufferHeight);
+
     // Lights
     glm::vec3 LightsPosition(0.f, 0.f, 2.f);
 
