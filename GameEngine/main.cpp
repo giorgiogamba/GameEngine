@@ -29,6 +29,13 @@ int main(void)
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
+    glewExperimental = GL_TRUE;
+    if (glewInit() != GLEW_OK)
+    {
+        std::cout << "Error while initializing glew" << std::endl;
+        return -1;
+    }
+
     // Rendering settings
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
