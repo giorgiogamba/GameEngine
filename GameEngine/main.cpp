@@ -163,6 +163,16 @@ void ApplyTexture(GLuint program, GLuint texture)
     glBindTexture(GL_TEXTURE_2D, texture);
 }
 
+glm::mat4 CreateModelMatrix(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+{
+    glm::mat4 modelMatrix(1.f); // Creates a diagonal identity matrix
+    modelMatrix = glm::translate(modelMatrix, position);
+    modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.x), glm::vec3(1.f, 0.f, 0.f)); // Rotation on the X axis
+    modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.y), glm::vec3(0.f, 1.f, 0.f)); // Rotation on the Y axis
+    modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.z), glm::vec3(0.f, 0.f, 1.f)); // Rotation on the Z axis
+    modelMatrix = glm::scale(modelMatrix, scale);
+    return modelMatrix;
+}
 int main(void)
 {
     GLFWwindow* window;
