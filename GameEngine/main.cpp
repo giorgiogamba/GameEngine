@@ -173,6 +173,17 @@ glm::mat4 CreateModelMatrix(const glm::vec3& position, const glm::vec3& rotation
     modelMatrix = glm::scale(modelMatrix, scale);
     return modelMatrix;
 }
+
+glm::mat4 CreateViewMatrix()
+{
+    // View matrix definition
+    glm::vec3 CameraUpVector(0.f, 1.f, 0.f); // generic up vector
+    glm::vec3 CameraFrontVector(0.f, 0.f, -1.f); // Bu CGI definition, camera looks at negative Z axis
+    glm::vec3 CameraPosition(0.f, 0.f, 2.f);
+    glm::mat4 ViewMatrix(1.f);
+    return glm::lookAt(CameraPosition, CameraPosition + CameraFrontVector, CameraUpVector);
+}
+
 int main(void)
 {
     GLFWwindow* window;
