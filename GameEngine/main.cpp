@@ -28,7 +28,6 @@ int main(void)
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
-    /* Loop until the user closes the window */
     // Rendering settings
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
