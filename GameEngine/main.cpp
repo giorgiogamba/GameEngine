@@ -317,6 +317,14 @@ int main(void)
 
     glBindVertexArray(0);
 
+    // Model matrix creation
+    // Collects all the transform informations for the given object
+    // Remember that matrices multiply from right to left
+
+    glm::vec3 position(0.f);
+    glm::vec3 rotation(0.f);
+    glm::vec3 scale(1.f);
+
     glm::mat4 modelMatrix = CreateModelMatrix(position, rotation, scale);
     glm::mat4 ViewMatrix = CreateViewMatrix();
     glm::mat4 ProjectionMatrix = CreatePerspectiveMatrix(FrameBufferWidth, FramebufferHeight);
