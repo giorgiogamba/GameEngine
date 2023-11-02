@@ -1,5 +1,27 @@
 // Copyright Giorgio Gamba
+
+#pragma region Includes
+
+#pragma region System Includes
+#include <stdio.h>
+#include <iostream>
+#include <string>
+#include <fstream>
+
+#include <glm/glm.hpp>
+#include <glm/common.hpp>
+#include "glm/gtc/matrix_transform.hpp"
+#include <glm/gtc/type_ptr.hpp>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <GL/GL.h>
+#include <gl/GLU.h>
+#include <SOIL2/SOIL2.h>
+#pragma endregion
+
+#include "src/Public/Utils.h"
+
+#pragma endregion
 bool loadShaders(GLuint& program)
 {
     char infoLog[512];
