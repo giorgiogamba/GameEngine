@@ -21,6 +21,7 @@ int main(void)
     window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Game Engine", NULL, NULL);
     if (!window)
     {
+        std::cout << "Unable to create OpenGL window" << std::endl;
         glfwTerminate();
         return -1;
     }
