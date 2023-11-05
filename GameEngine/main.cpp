@@ -81,47 +81,6 @@ void updateInput(GLFWwindow* window, glm::vec3& position, glm::vec3& rotation, g
     }
 }
 
-GLuint CreateTexture()
-{
-    // TEXTURE 1
-    // Texture Initialization
-    int texwidth, textheight;
-    unsigned char* teximage = SOIL_load_image("Textures/cat.png", &texwidth, &textheight, NULL, SOIL_LOAD_RGBA);
-
-    GLuint tex;
-    glGenTextures(1, &tex);
-    glBindTexture(GL_TEXTURE_2D, tex);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-    if (teximage)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texwidth, textheight, 0, GL_RGBA, GL_UNSIGNED_BYTE, teximage);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "ERROR: error while loading texture" << std::endl;
-        return 0;
-    }
-
-    glActiveTexture(0);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    SOIL_free_image_data(teximage);
-
-    return tex;
-}
-
-void ApplyTexture(GLuint program, GLuint texture)
-{
-    glUniform1i(glGetUniformLocation(program, "texture"), 0);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
-}
-
 glm::mat4 CreateModelMatrix(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
 {
     glm::mat4 modelMatrix(1.f); // Creates a diagonal identity matrix
@@ -320,7 +279,7 @@ void EnableVertexPointer()
 
     glBindVertexArray(0);
 
-    GLuint texture = CreateTexture();
+    Texture texture("Textures/cat.png");
 
     // Model matrix creation
     // Collects all the transform informations for the given object
@@ -363,8 +322,8 @@ void EnableVertexPointer()
         glUniformMatrix4fv(glGetUniformLocation(program, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
         shader.AddUniformMatrix4fv(ProjectionMatrix, "ProjectionMatrix");
 
-        ApplyTexture(program, texture);
         shader.use();
+        texture.ApplyTexture(shader.GetID());
 
         shader.DrawTriangles(VAO, numIndices);
 
@@ -374,9 +333,8 @@ void EnableVertexPointer()
         // Reset state
         glBindVertexArray(0);
         glUseProgram(0);
-        glActiveTexture(0);
-        glBindTexture(GL_TEXTURE_2D, 0);
         shader.unuse();
+        texture.unuse();
     }
 
     glfwTerminate();
