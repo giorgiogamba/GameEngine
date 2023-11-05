@@ -19,7 +19,14 @@
 #include <SOIL2/SOIL2.h>
 #pragma endregion
 
+#pragma region Local Includes
+
 #include "src/Public/Utils.h"
+#include "src/Public/Shader.h"
+#include "src/Public/Texture.h"
+#include "src/Public/Material.h"
+
+#pragma endregion
 
 #pragma endregion
 
