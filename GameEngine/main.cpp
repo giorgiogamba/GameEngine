@@ -313,7 +313,6 @@ void EnableVertexPointer()
         modelMatrix = CreateModelMatrix(position, rotation, scale);
         shader.AddUniformMatrix4fv(modelMatrix, "ModelMatrix");
 
-        glUniformMatrix4fv(glGetUniformLocation(program, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
         ProjectionMatrix = CreatePerspectiveMatrix(window);
         shader.AddUniformMatrix4fv(ProjectionMatrix, "ProjectionMatrix");
 
