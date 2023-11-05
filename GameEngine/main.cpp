@@ -259,6 +259,16 @@ glm::mat4 CreatePerspectiveMatrix(const int FrameBufferWidth, const int FrameBuf
 }
 
 int main(void)
+void SetupRendering()
+{
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CCW);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
 {
     GLFWwindow* window;
 
@@ -297,14 +307,6 @@ int main(void)
         return -1;
     }
 
-    // Rendering settings
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glFrontFace(GL_CCW);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     // Shaders creation
     GLuint program;
@@ -313,6 +315,7 @@ int main(void)
         std::cout << "Error while creating shaders" << std::endl;
         return -1;
     }
+    SetupRendering();
 
     // Buffers creation
     
