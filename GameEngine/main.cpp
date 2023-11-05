@@ -311,6 +311,29 @@ void SetupRendering()
     // Shaders creation
     GLuint program;
     if (!loadShaders(program))
+void EnableVertexPointer()
+{
+    int PointerIndex = 0;
+
+    // Position coordinates
+    glVertexAttribPointer(PointerIndex, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, position));
+    glEnableVertexAttribArray(PointerIndex);
+
+    // Rotation coordinates
+    PointerIndex++;
+    glVertexAttribPointer(PointerIndex, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, color));
+    glEnableVertexAttribArray(PointerIndex);
+
+    // Texture coordinates
+    PointerIndex++;
+    glVertexAttribPointer(PointerIndex, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, texcoord));
+    glEnableVertexAttribArray(PointerIndex);
+
+    // Normal vector
+    PointerIndex++;
+    glVertexAttribPointer(PointerIndex, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, normal));
+    glEnableVertexAttribArray(PointerIndex);
+}
     {
         std::cout << "Error while creating shaders" << std::endl;
         return -1;
