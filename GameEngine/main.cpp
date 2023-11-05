@@ -293,6 +293,10 @@ void EnableVertexPointer()
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     glDebugMessageCallback(glDebugOutput, nullptr);
     glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);*/
+
+    // Shaders creation
+    Shader shader("shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl");
+
     // Buffers creation
     
     // Vertex Array
@@ -330,23 +334,13 @@ void EnableVertexPointer()
     glm::mat4 ViewMatrix = CreateViewMatrix();
     glm::mat4 ProjectionMatrix = CreatePerspectiveMatrix(FrameBufferWidth, FramebufferHeight);
 
-    // Lights
-    glm::vec3 LightsPosition(0.f, 0.f, 2.f);
+    shader.AddUniformMatrix4fv(modelMatrix, "ModelMatrix");
+    shader.AddUniformMatrix4fv(ViewMatrix, "ViewMatrix");
+    shader.AddUniformMatrix4fv(ProjectionMatrix, "ProjectionMatrix");
 
-
-    // Send matrix to the GPU (matches vertex shader argument)
-    glUseProgram(program);
-
-    // Model matrix application
-    glUniformMatrix4fv(glGetUniformLocation(program, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
-    glUniformMatrix4fv(glGetUniformLocation(program, "ViewMatrix"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
-    glUniformMatrix4fv(glGetUniformLocation(program, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
-
-    glUniform3fv(glGetUniformLocation(program, "lightPos"), 1, glm::value_ptr(LightsPosition));
-    glm::vec3 CameraPosition(0.f, 0.f, 2.f);
-    glUniform3fv(glGetUniformLocation(program, "cameraPos"), 1, glm::value_ptr(CameraPosition));
-
-    glUseProgram(0);
+    glm::vec3 LightsPosition(0.f, 0.f, 2.f), CameraPosition(0.f, 0.f, 2.f);
+    shader.AddUniformVector3fv(LightsPosition, "lightPos");
+    shader.AddUniformVector3fv(CameraPosition, "cameraPos");
 
     // Rendering loop
     while (!glfwWindowShouldClose(window))
@@ -362,17 +356,18 @@ void EnableVertexPointer()
         glUseProgram(program);
 
         modelMatrix = CreateModelMatrix(position, rotation, scale);
-        glUniformMatrix4fv(glGetUniformLocation(program, "ModelMatrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
+        shader.AddUniformMatrix4fv(modelMatrix, "ModelMatrix");
 
         // Update window sizxe caching
         glfwGetFramebufferSize(window, &FrameBufferWidth, &FramebufferHeight);
         ProjectionMatrix = CreatePerspectiveMatrix(FrameBufferWidth, FramebufferHeight);
         glUniformMatrix4fv(glGetUniformLocation(program, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
+        shader.AddUniformMatrix4fv(ProjectionMatrix, "ProjectionMatrix");
 
         ApplyTexture(program, texture);
+        shader.use();
 
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
+        shader.DrawTriangles(VAO, numIndices);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
@@ -383,6 +378,7 @@ void EnableVertexPointer()
         glUseProgram(0);
         glActiveTexture(0);
         glBindTexture(GL_TEXTURE_2D, 0);
+        shader.unuse();
     }
 
     glfwTerminate();
