@@ -307,8 +307,6 @@ void EnableVertexPointer()
         glfwPollEvents();
         updateInput(window, position, rotation, scale);
 
-        glUseProgram(program);
-
         modelMatrix = CreateModelMatrix(position, rotation, scale);
         shader.AddUniformMatrix4fv(modelMatrix, "ModelMatrix");
 
