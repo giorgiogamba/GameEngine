@@ -269,7 +269,6 @@ int main(void)
     glDebugMessageCallback(glDebugOutput, nullptr);
     glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);*/
 
-    // Shaders creation
     Shader shader("shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl");
 
     // Buffers creation
