@@ -102,8 +102,11 @@ glm::mat4 CreateViewMatrix()
     return glm::lookAt(CameraPosition, CameraPosition + CameraFrontVector, CameraUpVector);
 }
 
-glm::mat4 CreatePerspectiveMatrix(const int FrameBufferWidth, const int FrameBufferHeight)
+glm::mat4 CreatePerspectiveMatrix(GLFWwindow* window)
 {
+    int FrameBufferWidth = 0, FrameBufferHeight = 0;
+    glfwGetFramebufferSize(window, &FrameBufferWidth, &FrameBufferHeight);
+
     float fov = 90.f;
     float ZNearPlane = 0.1f;
     float  ZFarPlane = 500.f;
@@ -291,7 +294,7 @@ void EnableVertexPointer()
 
     glm::mat4 modelMatrix = CreateModelMatrix(position, rotation, scale);
     glm::mat4 ViewMatrix = CreateViewMatrix();
-    glm::mat4 ProjectionMatrix = CreatePerspectiveMatrix(FrameBufferWidth, FramebufferHeight);
+    glm::mat4 ProjectionMatrix = CreatePerspectiveMatrix(window);
 
     shader.AddUniformMatrix4fv(modelMatrix, "ModelMatrix");
     shader.AddUniformMatrix4fv(ViewMatrix, "ViewMatrix");
@@ -310,10 +313,8 @@ void EnableVertexPointer()
         modelMatrix = CreateModelMatrix(position, rotation, scale);
         shader.AddUniformMatrix4fv(modelMatrix, "ModelMatrix");
 
-        // Update window sizxe caching
-        glfwGetFramebufferSize(window, &FrameBufferWidth, &FramebufferHeight);
-        ProjectionMatrix = CreatePerspectiveMatrix(FrameBufferWidth, FramebufferHeight);
         glUniformMatrix4fv(glGetUniformLocation(program, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
+        ProjectionMatrix = CreatePerspectiveMatrix(window);
         shader.AddUniformMatrix4fv(ProjectionMatrix, "ProjectionMatrix");
 
         // Clean screen
