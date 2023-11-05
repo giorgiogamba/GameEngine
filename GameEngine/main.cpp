@@ -246,7 +246,7 @@ void EnableVertexPointer()
     glEnableVertexAttribArray(PointerIndex);
 }
     {
-        std::cout << "Error while creating shaders" << std::endl;
+        std::cout << "Unable to create the window" << std::endl;
         return -1;
     }
     SetupRendering();
