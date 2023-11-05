@@ -307,10 +307,6 @@ void EnableVertexPointer()
         glfwPollEvents();
         updateInput(window, position, rotation, scale);
 
-        /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
         glUseProgram(program);
 
         modelMatrix = CreateModelMatrix(position, rotation, scale);
@@ -321,6 +317,10 @@ void EnableVertexPointer()
         ProjectionMatrix = CreatePerspectiveMatrix(FrameBufferWidth, FramebufferHeight);
         glUniformMatrix4fv(glGetUniformLocation(program, "ProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
         shader.AddUniformMatrix4fv(ProjectionMatrix, "ProjectionMatrix");
+
+        // Clean screen
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         shader.use();
         texture.ApplyTexture(shader.GetID());
