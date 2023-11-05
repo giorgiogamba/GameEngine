@@ -307,6 +307,7 @@ void EnableVertexPointer()
         glfwPollEvents();
         updateInput(window, position, rotation, scale);
 
+        // Update matrices
         modelMatrix = CreateModelMatrix(position, rotation, scale);
         shader.AddUniformMatrix4fv(modelMatrix, "ModelMatrix");
 
@@ -317,6 +318,7 @@ void EnableVertexPointer()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
+        // Render
         shader.use();
         texture.ApplyTexture(shader.GetID());
 
