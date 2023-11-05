@@ -270,6 +270,8 @@ int main(void)
     glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);*/
 
     Shader shader("shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl");
+    Material material(glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f));
+    material.ApplyToShader(&shader);
 
     // Buffers creation
     
