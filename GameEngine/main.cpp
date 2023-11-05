@@ -345,7 +345,6 @@ void EnableVertexPointer()
     // Rendering loop
     while (!glfwWindowShouldClose(window))
     {
-        /* Poll for and process events */
         glfwPollEvents();
         updateInput(window, position, rotation, scale);
 
@@ -369,7 +368,6 @@ void EnableVertexPointer()
 
         shader.DrawTriangles(VAO, numIndices);
 
-        /* Swap front and back buffers */
         glfwSwapBuffers(window);
         glFlush();
 
