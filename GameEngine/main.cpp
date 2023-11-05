@@ -332,7 +332,6 @@ void EnableVertexPointer()
 
         // Reset state
         glBindVertexArray(0);
-        glUseProgram(0);
         shader.unuse();
         texture.unuse();
     }
