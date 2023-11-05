@@ -120,7 +120,6 @@ glm::mat4 CreatePerspectiveMatrix(GLFWwindow* window)
     return ProjectionMatrix;
 }
 
-int main(void)
 void SetupRendering()
 {
     glEnable(GL_DEPTH_TEST);
@@ -179,19 +178,29 @@ void glDebugOutput(GLenum source,
     std::cout << std::endl;
 }
 
-    // OpenGL Initialization
+void SetupEngineVersion()
+{
+    
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
+}
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Game Engine", NULL, NULL);
+GLFWwindow* CreateWindow()
+{
+    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Game Engine", NULL, NULL);
     if (!window)
     {
         std::cout << "Unable to create OpenGL window" << std::endl;
         glfwTerminate();
-        return -1;
+        return nullptr;
+    }
+
+    return window;
+}
+
 GLFWwindow* SetupEngine()
 {
     GLFWwindow* window = nullptr;
@@ -219,9 +228,6 @@ GLFWwindow* SetupEngine()
     return window;
 }
 
-    // Shaders creation
-    GLuint program;
-    if (!loadShaders(program))
 void EnableVertexPointer()
 {
     int PointerIndex = 0;
@@ -245,10 +251,17 @@ void EnableVertexPointer()
     glVertexAttribPointer(PointerIndex, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, normal));
     glEnableVertexAttribArray(PointerIndex);
 }
+
+int main(void)
+{
+    SetupEngineVersion(); 
+    GLFWwindow* window = SetupEngine();
+    if (!window)
     {
         std::cout << "Unable to create the window" << std::endl;
         return -1;
     }
+    
     SetupRendering();
 
     /*glEnable(GL_DEBUG_OUTPUT);
