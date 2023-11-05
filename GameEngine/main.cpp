@@ -330,21 +330,32 @@ void glDebugOutput(GLenum source,
         std::cout << "Unable to create OpenGL window" << std::endl;
         glfwTerminate();
         return -1;
+GLFWwindow* SetupEngine()
+{
+    GLFWwindow* window = nullptr;
+
+    if (!glfwInit())
+    {
+        std::cout << "Unable to initialize OpenGL screen" << std::endl;
+        return nullptr;
     }
 
-    int FrameBufferWidth = 0, FramebufferHeight = 0;
-    glfwGetFramebufferSize(window, &FrameBufferWidth, &FramebufferHeight);
+    window = CreateWindow();
+    if (!window)
+        return nullptr;
 
-    /* Make the window's context current */
+
     glfwMakeContextCurrent(window);
 
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK)
     {
         std::cout << "Error while initializing glew" << std::endl;
-        return -1;
+        return nullptr;
     }
 
+    return window;
+}
 
     // Shaders creation
     GLuint program;
