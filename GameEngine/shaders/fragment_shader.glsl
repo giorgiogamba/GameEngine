@@ -22,17 +22,17 @@ uniform vec3 cameraPos;
 
 vec3 computeDiffuseLightning()
 {
-	vec3 direction = normalize(vs_position - lightPos);
+	vec3 direction = normalize(lightPos - vs_position);
 	float diffuse = clamp (dot(direction, vs_normal), 0, 1);
 	return material.diffuseColor * diffuse;
 }
 
 vec3 computeSpecularLightning()
 {
-	vec3 posToLightDir = normalize(vec3(lightPos - vs_position));
-	vec3 reflectPosToLightDir = reflect(posToLightDir, vs_normal);
-	vec3 posToViewDir = normalize(vec3(vs_position - cameraPos));
-	float specularConstant = pow(max(dot(posToViewDir, reflectPosToLightDir), 0), 40);
+	vec3 lightToPosDir = normalize(vec3(vs_position - lightPos));
+	vec3 reflectLightToPosDir = reflect(lightToPosDir, vs_normal);
+	vec3 posToViewDir = normalize(vec3(cameraPos - vs_position));
+	float specularConstant = pow(max(dot(posToViewDir, reflectLightToPosDir), 0), 40);
 	return vec3(1.f, 1.f, 1.f) * specularConstant;
 }
 
