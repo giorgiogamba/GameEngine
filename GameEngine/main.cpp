@@ -25,6 +25,7 @@
 #include "src/Public/Shader.h"
 #include "src/Public/Texture.h"
 #include "src/Public/Material.h"
+#include "src/Public/Camera.h"
 
 #pragma endregion
 
@@ -100,24 +101,6 @@ glm::mat4 CreateViewMatrix()
     glm::vec3 CameraPosition(0.f, 0.f, 2.f);
     glm::mat4 ViewMatrix(1.f);
     return glm::lookAt(CameraPosition, CameraPosition + CameraFrontVector, CameraUpVector);
-}
-
-glm::mat4 CreatePerspectiveMatrix(GLFWwindow* window)
-{
-    int FrameBufferWidth = 0, FrameBufferHeight = 0;
-    glfwGetFramebufferSize(window, &FrameBufferWidth, &FrameBufferHeight);
-
-    float fov = 90.f;
-    float ZNearPlane = 0.1f;
-    float  ZFarPlane = 500.f;
-    glm::mat4 ProjectionMatrix(1.f);
-    ProjectionMatrix = glm::perspective
-    (glm::radians(fov)                                             // Field of view
-        , static_cast<float>(FrameBufferWidth) / FrameBufferHeight     // Aspect Ratio
-        , ZNearPlane
-        , ZFarPlane);
-
-    return ProjectionMatrix;
 }
 
 void SetupRendering()
@@ -303,6 +286,8 @@ int main(void)
     glBindVertexArray(0);
 
     Texture texture("Textures/cat.png");
+    Camera camera;
+    camera.UpdatePerspectiveMatrix(window, &shader);
 
     // Model matrix creation
     // Collects all the transform informations for the given object
@@ -311,15 +296,9 @@ int main(void)
     glm::vec3 position(0.f), rotation(0.f), scale(1.f);
     glm::mat4 modelMatrix = CreateModelMatrix(position, rotation, scale);
     glm::mat4 ViewMatrix = CreateViewMatrix();
-    glm::mat4 ProjectionMatrix = CreatePerspectiveMatrix(window);
 
     shader.AddUniformMatrix4fv(modelMatrix, "ModelMatrix");
     shader.AddUniformMatrix4fv(ViewMatrix, "ViewMatrix");
-    shader.AddUniformMatrix4fv(ProjectionMatrix, "ProjectionMatrix");
-
-    glm::vec3 LightsPosition(0.f, 0.f, 2.f), CameraPosition(0.f, 0.f, 2.f);
-    shader.AddUniformVector3fv(LightsPosition, "lightPos");
-    shader.AddUniformVector3fv(CameraPosition, "cameraPos");
 
     // Rendering loop
     while (!glfwWindowShouldClose(window))
@@ -331,8 +310,7 @@ int main(void)
         modelMatrix = CreateModelMatrix(position, rotation, scale);
         shader.AddUniformMatrix4fv(modelMatrix, "ModelMatrix");
 
-        ProjectionMatrix = CreatePerspectiveMatrix(window);
-        shader.AddUniformMatrix4fv(ProjectionMatrix, "ProjectionMatrix");
+        camera.UpdatePerspectiveMatrix(window, &shader);
 
         ResetScreen();
 
