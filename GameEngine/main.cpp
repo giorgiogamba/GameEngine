@@ -287,6 +287,7 @@ int main(void)
 
     Texture texture("Textures/cat.png");
     Camera camera;
+    camera.AddToShader(&shader);
     camera.UpdatePerspectiveMatrix(window, &shader);
 
     // Model matrix creation
