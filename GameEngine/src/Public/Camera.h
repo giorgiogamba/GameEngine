@@ -1,5 +1,7 @@
 // Copyright Giorgio Gamba
 
+#pragma once
+
 class Camera
 {
 

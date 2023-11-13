@@ -1,5 +1,7 @@
 // General Utility class
 
+#pragma once
+
 #include <glm/glm.hpp>
 
 #pragma region Definitions

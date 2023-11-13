@@ -2,6 +2,8 @@
 
 #pragma region Includes
 
+#pragma once
+
 #pragma region System Includes
 #include <stdio.h>
 #include <iostream>
