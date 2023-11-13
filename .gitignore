@@ -365,4 +365,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 CppProperties.json
+GameEngine/Textures/green_Grunge_detailed_texture_in_white_background.eps
 GameEngine/GameEngine.vcxproj
