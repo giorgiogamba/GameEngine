@@ -36,6 +36,18 @@ public:
 		return ProjectionMatrix;
 	}
 
+	void CreateViewMatrix(Shader* shader)
+	{
+		// View matrix definition
+		glm::vec3 CameraUpVector(0.f, 1.f, 0.f); // generic up vector
+		glm::vec3 CameraFrontVector(0.f, 0.f, -1.f); // Bu CGI definition, camera looks at negative Z axis
+		glm::vec3 CameraPosition(0.f, 0.f, 2.f);
+		glm::mat4 ViewMatrix(1.f);
+		ViewMatrix = glm::lookAt(CameraPosition, CameraPosition + CameraFrontVector, CameraUpVector);
+
+		shader->AddUniformMatrix4fv(ViewMatrix, "ViewMatrix");
+	}
+
 	void UpdatePerspectiveMatrix(GLFWwindow* window, Shader* shader)
 	{
 		ProjectionMatrix = CreatePerspectiveMatrix(window);
@@ -48,5 +60,6 @@ private:
 	glm::vec3 cameraPosition;
 
 	glm::mat4 ProjectionMatrix;
+	glm::mat4 ViewMatrix;
 
 };

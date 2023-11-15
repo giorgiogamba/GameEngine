@@ -95,16 +95,6 @@ glm::mat4 CreateModelMatrix(const glm::vec3& position, const glm::vec3& rotation
     return modelMatrix;
 }
 
-glm::mat4 CreateViewMatrix()
-{
-    // View matrix definition
-    glm::vec3 CameraUpVector(0.f, 1.f, 0.f); // generic up vector
-    glm::vec3 CameraFrontVector(0.f, 0.f, -1.f); // Bu CGI definition, camera looks at negative Z axis
-    glm::vec3 CameraPosition(0.f, 0.f, 2.f);
-    glm::mat4 ViewMatrix(1.f);
-    return glm::lookAt(CameraPosition, CameraPosition + CameraFrontVector, CameraUpVector);
-}
-
 void SetupRendering()
 {
     glEnable(GL_DEPTH_TEST);
@@ -298,10 +288,9 @@ int main(void)
 
     glm::vec3 position(0.f), rotation(0.f), scale(1.f);
     glm::mat4 modelMatrix = CreateModelMatrix(position, rotation, scale);
-    glm::mat4 ViewMatrix = CreateViewMatrix();
 
     shader.AddUniformMatrix4fv(modelMatrix, "ModelMatrix");
-    shader.AddUniformMatrix4fv(ViewMatrix, "ViewMatrix");
+    camera.CreateViewMatrix(&shader);
 
     // Rendering loop
     while (!glfwWindowShouldClose(window))
