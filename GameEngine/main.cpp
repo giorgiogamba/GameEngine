@@ -28,72 +28,11 @@
 #include "src/Public/Texture.h"
 #include "src/Public/Material.h"
 #include "src/Public/Camera.h"
+#include "src/Public/Mesh.h"
 
 #pragma endregion
 
 #pragma endregion
-
-#pragma region Triangle Vertices
-
-// Basic 2 triangles definition
-Vertex vertices[] =
-{
-    glm::vec3(-0.5f, 0.5f, 0.0f),       glm::vec3(1.0f, 0.0f, 0.0f),    glm::vec2(0.0f, 1.0f), glm::vec3(0.f, 0.f, 1.f),
-    glm::vec3(-0.5f, -0.5f, 0.0f),      glm::vec3(0.0f, 1.0f, 0.0f),    glm::vec2(0.0f, 0.0f), glm::vec3(0.f, 0.f, 1.f),
-    glm::vec3(0.5f, -0.5f, 0.0f),       glm::vec3(0.0f, 0.0f, 1.0f),    glm::vec2(1.0f, 0.0f), glm::vec3(0.f, 0.f, 1.f),
-    glm::vec3(0.5f, 0.5f, 0.0f),        glm::vec3(1.0f, 1.0f, 0.0f),    glm::vec2(1.0f, 1.0f), glm::vec3(0.f, 0.f, 1.f),
-};
-
-unsigned numVertices = sizeof(vertices) / sizeof(Vertex);
-
-GLuint indices[] =
-{
-    0, 1, 2,
-    0, 2, 3
-};
-
-unsigned numIndices = 6;
-
-#pragma endregion
-
-void updateInput(GLFWwindow* window, glm::vec3& position, glm::vec3& rotation, glm::vec3& scale)
-{
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    {
-        position.z -= 0.005f;
-    }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    {
-        position.z += 0.005f;
-    }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    {
-        position.x -= 0.005f;
-    }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    {
-        position.x += 0.005f;
-    }
-    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-    {
-        rotation.y -= 0.05f;
-    }
-    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-    {
-        rotation.y += 0.05f;
-    }
-}
-
-glm::mat4 CreateModelMatrix(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
-{
-    glm::mat4 modelMatrix(1.f); // Creates a diagonal identity matrix
-    modelMatrix = glm::translate(modelMatrix, position);
-    modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.x), glm::vec3(1.f, 0.f, 0.f)); // Rotation on the X axis
-    modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.y), glm::vec3(0.f, 1.f, 0.f)); // Rotation on the Y axis
-    modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.z), glm::vec3(0.f, 0.f, 1.f)); // Rotation on the Z axis
-    modelMatrix = glm::scale(modelMatrix, scale);
-    return modelMatrix;
-}
 
 void SetupRendering()
 {
@@ -203,30 +142,6 @@ GLFWwindow* SetupEngine()
     return window;
 }
 
-void EnableVertexPointer()
-{
-    int PointerIndex = 0;
-
-    // Position coordinates
-    glVertexAttribPointer(PointerIndex, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, position));
-    glEnableVertexAttribArray(PointerIndex);
-
-    // Rotation coordinates
-    PointerIndex++;
-    glVertexAttribPointer(PointerIndex, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, color));
-    glEnableVertexAttribArray(PointerIndex);
-
-    // Texture coordinates
-    PointerIndex++;
-    glVertexAttribPointer(PointerIndex, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, texcoord));
-    glEnableVertexAttribArray(PointerIndex);
-
-    // Normal vector
-    PointerIndex++;
-    glVertexAttribPointer(PointerIndex, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, normal));
-    glEnableVertexAttribArray(PointerIndex);
-}
-
 void ResetScreen()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -253,56 +168,23 @@ int main(void)
     Shader shader("shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl");
     Material material(glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f));
     material.ApplyToShader(&shader);
-
-    // Buffers creation
     
     // Vertex Array
-    GLuint VAO;
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-
-    // Vertex Buffer
-    GLuint VBO;
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    // Element Buffer
-    GLuint EBO;
-    glGenBuffers(1, &EBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    EnableVertexPointer();
-
-    glBindVertexArray(0);
-
+    Mesh mesh;
     Texture texture("Textures/cat.png");
+    
     Camera camera;
     camera.AddToShader(&shader);
     camera.UpdatePerspectiveMatrix(window, &shader);
-
-    // Model matrix creation
-    // Collects all the transform informations for the given object
-    // Remember that matrices multiply from right to left
-
-    glm::vec3 position(0.f), rotation(0.f), scale(1.f);
-    glm::mat4 modelMatrix = CreateModelMatrix(position, rotation, scale);
-
-    shader.AddUniformMatrix4fv(modelMatrix, "ModelMatrix");
     camera.CreateViewMatrix(&shader);
 
     // Rendering loop
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
-        updateInput(window, position, rotation, scale);
-
-        // Update matrices
-        modelMatrix = CreateModelMatrix(position, rotation, scale);
-        shader.AddUniformMatrix4fv(modelMatrix, "ModelMatrix");
 
         camera.UpdatePerspectiveMatrix(window, &shader);
+        mesh.Update(window, &shader);
 
         ResetScreen();
 
@@ -310,7 +192,7 @@ int main(void)
         shader.use();
         texture.ApplyTexture(shader.GetID());
 
-        shader.DrawTriangles(VAO, numIndices);
+        mesh.Draw();
 
         glfwSwapBuffers(window);
         glFlush();

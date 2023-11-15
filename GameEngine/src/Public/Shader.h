@@ -150,11 +150,7 @@ public:
         unuse();
     }
 
-    void DrawTriangles(GLuint vertexArray, int numIndices)
-    {
-        glBindVertexArray(vertexArray);
-        glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
-    }
+    
 
     void use()
     {
