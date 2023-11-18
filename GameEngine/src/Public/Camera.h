@@ -10,6 +10,9 @@ public:
 	{
 		lightPosition = glm::vec3(0.f, 0.f, 2.f);
 		cameraPosition = glm::vec3(0.f, 0.f, 2.f);
+
+		ProjectionMatrix = glm::mat4();
+		ViewMatrix = glm::mat4();
 	}
 
 	void AddToShader(Shader* shader)
