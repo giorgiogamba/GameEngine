@@ -83,8 +83,8 @@ public:
 
 		GLuint indices[] =
 		{
-			0, 1, 2,
-			0, 2, 3
+			0, 1, 2, // Triangle 1
+			0, 2, 3  // Triangle 2
 		};
 
 		unsigned numIndices = 6;
