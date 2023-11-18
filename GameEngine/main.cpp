@@ -29,6 +29,7 @@
 #include "src/Public/Material.h"
 #include "src/Public/Camera.h"
 #include "src/Public/Mesh.h"
+#include "src/Public/Primitive.h"
 
 #pragma endregion
 
@@ -168,9 +169,11 @@ int main(void)
     Shader shader("shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl");
     Material material(glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f));
     material.ApplyToShader(&shader);
+
+    Quad quad;
     
     // Vertex Array
-    Mesh mesh;
+    Mesh mesh(&quad);
     Texture texture("Textures/cat.png");
     
     Camera camera;

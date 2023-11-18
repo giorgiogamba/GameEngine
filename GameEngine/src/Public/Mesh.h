@@ -1,29 +1,11 @@
 // Copyright Giorgio Gamba
 
+#pragma region Includes
+
 #pragma once
 
 #include "Shader.h"
-
-#pragma region Triangle Vertices
-
-// Basic 2 triangles definition
-Vertex vertices[] =
-{
-	glm::vec3(-0.5f, 0.5f, 0.0f),       glm::vec3(1.0f, 0.0f, 0.0f),    glm::vec2(0.0f, 1.0f), glm::vec3(0.f, 0.f, 1.f),
-	glm::vec3(-0.5f, -0.5f, 0.0f),      glm::vec3(0.0f, 1.0f, 0.0f),    glm::vec2(0.0f, 0.0f), glm::vec3(0.f, 0.f, 1.f),
-	glm::vec3(0.5f, -0.5f, 0.0f),       glm::vec3(0.0f, 0.0f, 1.0f),    glm::vec2(1.0f, 0.0f), glm::vec3(0.f, 0.f, 1.f),
-	glm::vec3(0.5f, 0.5f, 0.0f),        glm::vec3(1.0f, 1.0f, 0.0f),    glm::vec2(1.0f, 1.0f), glm::vec3(0.f, 0.f, 1.f),
-};
-
-unsigned numVertices = sizeof(vertices) / sizeof(Vertex);
-
-GLuint indices[] =
-{
-	0, 1, 2,
-	0, 2, 3
-};
-
-unsigned numIndices = 6;
+#include "Primitive.h"
 
 #pragma endregion
 
@@ -32,8 +14,10 @@ class Mesh
 
 public:
 
-	Mesh()
+	Mesh(Primitive* Primitive)
 	{
+		this->Primitive = Primitive;
+
 		position = glm::vec3(0.f);
 		rotation = glm::vec3(0.f);
 		scale = glm::vec3(1.f);
@@ -60,7 +44,7 @@ public:
 	void Draw()
 	{
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, Primitive->GetNumIndices(), GL_UNSIGNED_INT, 0);
 	}
 
 private:
@@ -126,11 +110,11 @@ private:
 
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * Primitive->GetNumVertices(), Primitive->GetVertices(), GL_STATIC_DRAW);
 
 		glGenBuffers(1, &EBO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * Primitive->GetNumIndices(), Primitive->GetIndices(), GL_STATIC_DRAW);
 	}
 
 	void CreateModelMatrix()
@@ -142,6 +126,8 @@ private:
 		modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.z), glm::vec3(0.f, 0.f, 1.f)); // Rotation on the Z axis
 		modelMatrix = glm::scale(modelMatrix, scale);
 	}
+
+	Primitive* Primitive;
 
 	GLuint VAO;
 	GLuint VBO;
