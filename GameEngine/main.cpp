@@ -31,6 +31,8 @@
 #include "src/Public/Mesh.h"
 #include "src/Public/Primitive.h"
 
+#include "src/Config/Configuration.h"
+
 #pragma endregion
 
 #pragma endregion
@@ -93,19 +95,19 @@ void glDebugOutput(GLenum source,
     std::cout << std::endl;
 }
 
-void SetupEngineVersion()
+void SetupEngineVersion(const int OpenGLMinVersion, const int OpenGLMajVersion, const bool bResizable)
 {
     
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OpenGLMajVersion);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OpenGLMinVersion);
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, bResizable);
 }
 
-GLFWwindow* CreateWindow()
+GLFWwindow* CreateWindow(const char* WindowTitle)
 {
-    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Game Engine", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WindowTitle, NULL, NULL);
     if (!window)
     {
         std::cout << "Unable to create OpenGL window" << std::endl;
@@ -116,17 +118,17 @@ GLFWwindow* CreateWindow()
     return window;
 }
 
-GLFWwindow* SetupEngine()
+GLFWwindow* SetupEngine(const char* WindowTitle, const int OpenGLMinVersion, const int OpenGLMajVersion, const bool bResizable)
 {
-    GLFWwindow* window = nullptr;
+    SetupEngineVersion(OpenGLMinVersion, OpenGLMajVersion, bResizable);
 
     if (!glfwInit())
     {
-        std::cout << "Unable to initialize OpenGL screen" << std::endl;
+        std::cout << "Error while initializing GLFW" << std::endl;
         return nullptr;
     }
 
-    window = CreateWindow();
+    GLFWwindow* window = CreateWindow(WindowTitle);
     if (!window)
         return nullptr;
 
@@ -151,8 +153,7 @@ void ResetScreen()
 
 int main(void)
 {
-    SetupEngineVersion(); 
-    GLFWwindow* window = SetupEngine();
+    GLFWwindow* window = SetupEngine("Game Engine", OPENGLMAJVERSION, OPENGLMINVERSION, RESIZABLE);
     if (!window)
     {
         std::cout << "Unable to create the window" << std::endl;
