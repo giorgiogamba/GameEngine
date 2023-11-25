@@ -117,7 +117,7 @@ void Game::InitMaterials()
 
 void Game::InitMeshes()
 {
-    Meshes.push_back(new Mesh(new Quad()));
+    Meshes.push_back(new Mesh(new /*Quad()*/ Pyramid()));
 }
 
 #pragma endregion

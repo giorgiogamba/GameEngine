@@ -18,7 +18,7 @@ public:
 
 	void Initialize(Vertex* vertices, const unsigned NumVertices, GLuint* indices, const unsigned NumIndices)
 	{
-		if (!vertices || !indices)
+		if (!vertices)
 			return;
 
 		for (size_t i = 0; i < NumVertices; i++)
@@ -100,6 +100,39 @@ public:
 		unsigned numIndices = 6;
 
 		Initialize(vertices, numVertices, indices, numIndices);
+	}
+
+};
+
+class Pyramid : public Primitive
+{
+public:
+
+	Pyramid() : Primitive()
+	{
+		// Basic 2 triangles definition
+		Vertex vertices[] =
+		{
+			glm::vec3(0.0f, 0.5f, 0.0f),		glm::vec3(1.0f, 0.0f, 0.0f),    glm::vec2(0.5f, 1.0f), glm::vec3(0.f, 0.f, 1.f),
+			glm::vec3(-0.5f, -0.5f, 0.5f),      glm::vec3(0.0f, 1.0f, 0.0f),    glm::vec2(0.0f, 0.0f), glm::vec3(0.f, 0.f, 1.f),
+			glm::vec3(0.5f, -0.5f, 0.5f),       glm::vec3(0.0f, 0.0f, 1.0f),    glm::vec2(1.0f, 0.0f), glm::vec3(0.f, 0.f, 1.f),
+
+			glm::vec3(0.0f, 0.5f, 0.0f),		glm::vec3(1.0f, 1.0f, 0.0f),    glm::vec2(0.5f, 1.0f), glm::vec3(-1.f, 0.f, 0.f),
+			glm::vec3(-0.5f, -0.5f, -0.5f),     glm::vec3(0.0f, 0.0f, 1.0f),    glm::vec2(0.0f, 0.0f), glm::vec3(-1.f, 0.f, 0.f),
+			glm::vec3(-0.5f, -0.5f, 0.5f),      glm::vec3(0.0f, 0.0f, 1.0f),    glm::vec2(1.0f, 0.0f), glm::vec3(-1.f, 0.f, 0.f),
+
+			glm::vec3(0.0f, 0.5f, 0.0f),		glm::vec3(1.0f, 1.0f, 0.0f),    glm::vec2(0.5f, 1.0f), glm::vec3(0.f, 0.f, -1.f),
+			glm::vec3(0.5f, -0.5f, -0.5f),      glm::vec3(0.0f, 0.0f, 1.0f),    glm::vec2(0.0f, 0.0f), glm::vec3(0.f, 0.f, -1.f),
+			glm::vec3(-0.5f, -0.5f, -0.5f),     glm::vec3(0.0f, 0.0f, 1.0f),    glm::vec2(1.0f, 0.0f), glm::vec3(0.f, 0.f, -1.f),
+
+			glm::vec3(0.0f, 0.5f, 0.0f),		glm::vec3(1.0f, 1.0f, 0.0f),    glm::vec2(0.5f, 1.0f), glm::vec3(1.f, 0.f, 0.f),
+			glm::vec3(0.5f, -0.5f, 0.5f),		glm::vec3(0.0f, 0.0f, 1.0f),    glm::vec2(0.0f, 0.0f), glm::vec3(1.f, 0.f, 0.f),
+			glm::vec3(0.5f, -0.5f, -0.5f),      glm::vec3(0.0f, 0.0f, 1.0f),    glm::vec2(1.0f, 0.0f), glm::vec3(1.f, 0.f, 0.f),
+		};
+
+		unsigned numVertices = sizeof(vertices) / sizeof(Vertex);
+
+		Initialize(vertices, numVertices, NULL, 0);
 	}
 
 };

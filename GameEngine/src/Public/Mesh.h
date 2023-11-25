@@ -35,7 +35,11 @@ public:
 	{
 		glDeleteVertexArrays(1, &VAO);
 		glDeleteBuffers(1, &VBO);
-		glDeleteBuffers(1, &EBO);
+
+		if (Primitive->GetNumVertices() > 0)
+		{
+			glDeleteBuffers(1, &EBO);
+		}
 	}
 
 	void Update(GLFWwindow* window, Shader* shader)
@@ -51,7 +55,15 @@ public:
 	void Draw()
 	{
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, (unsigned) Primitive->GetNumIndices(), GL_UNSIGNED_INT, 0);
+
+		if (Primitive->GetNumIndices() == 0)
+		{
+			glDrawArrays(GL_TRIANGLES, 0, (unsigned) Primitive->GetNumVertices());
+		}
+		else
+		{
+			glDrawElements(GL_TRIANGLES, (unsigned)Primitive->GetNumIndices(), GL_UNSIGNED_INT, 0);
+		}
 	}
 
 private:
@@ -122,9 +134,12 @@ private:
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * Primitive->GetNumVertices(), Primitive->GetVertices(), GL_STATIC_DRAW);
 
-		glGenBuffers(1, &EBO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * Primitive->GetNumIndices(), Primitive->GetIndices(), GL_STATIC_DRAW);
+		if (Primitive->GetNumVertices() > 0)
+		{
+			glGenBuffers(1, &EBO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * Primitive->GetNumIndices(), Primitive->GetIndices(), GL_STATIC_DRAW);
+		}
 	}
 
 	void CreateModelMatrix()
