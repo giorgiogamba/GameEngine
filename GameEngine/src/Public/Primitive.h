@@ -28,7 +28,7 @@ public:
 	unsigned GetNumVertices() const { return this->vertices.size(); }
 	unsigned GetNumIndices() const { return this->indices.size(); }
 
-private:
+protected:
 
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
