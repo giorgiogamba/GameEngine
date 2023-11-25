@@ -1,6 +1,13 @@
+// Copyright Giorgio Gamba
+
+#pragma region Includes
+
 #pragma once
 
 #include <vector>
+#include "Utils.h"
+
+#pragma endregion
 
 class Primitive
 {
