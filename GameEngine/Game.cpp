@@ -34,21 +34,33 @@ Game::~Game()
     // Delete all the structures
     for (std::vector<Mesh*>::iterator it = Meshes.begin(); it < Meshes.end(); it++)
     {
+        if (!*it)
+            continue;
+
         delete* it;
     }
 
     for (std::vector<Shader*>::iterator it = Shaders.begin(); it < Shaders.end(); it++)
     {
+        if (!*it)
+            continue;
+
         delete* it;
     }
 
     for (std::vector<Texture*>::iterator it = Textures.begin(); it < Textures.end(); it++)
     {
+        if (!*it)
+            continue;
+
         delete* it;
     }
 
     for (std::vector<Material*>::iterator it = Materials.begin(); it < Materials.end(); it++)
     {
+        if (!*it)
+            continue;
+
         delete* it;
     }
 }
@@ -70,11 +82,19 @@ void Game::InitGameElements()
 
 void Game::InitCamera()
 {
+    Shader* CurrShader = Shaders[0];
+    if (!CurrShader || !Window)
+        return;
+
     Camera NewCamera;
     Cameras.push_back(&NewCamera);
-    Cameras[0]->AddToShader(Shaders[0]);
-    Cameras[0]->UpdatePerspectiveMatrix(Window, Shaders[0]);
-    Cameras[0]->CreateViewMatrix(Shaders[0]);
+
+    if (Cameras.size() == 0)
+        return;
+
+    Cameras[0]->AddToShader(CurrShader);
+    Cameras[0]->UpdatePerspectiveMatrix(Window, CurrShader);
+    Cameras[0]->CreateViewMatrix(CurrShader);
 }
 
 void Game::InitShaders()
@@ -89,15 +109,14 @@ void Game::InitTextures()
 
 void Game::InitMaterials()
 {
+    if (!Shaders[0])
+        return;
+
     this->Materials.push_back(new Material(glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), Shaders[0]));
 }
 
 void Game::InitMeshes()
 {
-    /*Quad quad;
-    Mesh Mesh(&quad); 
-    AddMesh(&Mesh);*/
-
     Meshes.push_back(new Mesh(new Quad()));
 }
 
@@ -118,7 +137,6 @@ void Game::InitWindow(const char* WindowTitle, const int OpenGLMinVersion, const
     Window = CreateWindow(WindowTitle);
     if (!Window)
         return;
-
 
     glfwMakeContextCurrent(Window);
 
@@ -171,8 +189,15 @@ void Game::SetupRendering()
 
 void Game::Update()
 {
+    if (!Window)
+        return;
+
     for (Mesh* Mesh : Meshes)
     {
+        Shader* CurrShader = Shaders[0];
+        if (!CurrShader || !Mesh)
+            continue;
+
         Mesh->Update(Window, Shaders[0]);
     }
 
@@ -180,6 +205,9 @@ void Game::Update()
 
     for (Shader* Shader : Shaders)
     {
+        if (!Shader)
+            continue;
+
         Cameras[0]->UpdatePerspectiveMatrix(Window, Shader);
     }
 }
@@ -190,12 +218,19 @@ void Game::Render()
 
     for (Texture* Texture : Textures)
     {
-        Shaders[0]->use();
+        Shader* CurrShader = Shaders[0];
+        if (!CurrShader || !Texture)
+            continue;
+
+        CurrShader->use();
         Texture->ApplyTexture(Shaders[0]->GetID());
     }
 
     for (Mesh* Mesh : Meshes)
     {
+        if (!Mesh)
+            continue;
+
         Mesh->Draw();
     }
 
@@ -209,11 +244,17 @@ void Game::Reset()
 
     for (Shader* Shader : Shaders)
     {
+        if (!Shader)
+            continue;
+
         Shader->unuse();
     }
 
     for (Texture* Texture : Textures)
     {
+        if (!Texture)
+            continue;
+
         Texture->unuse();
     }
 }

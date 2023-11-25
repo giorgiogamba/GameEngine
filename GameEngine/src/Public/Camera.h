@@ -17,12 +17,18 @@ public:
 
 	void AddToShader(Shader* shader)
 	{
+		if (!shader)
+			return;
+
 		shader->AddUniformVector3fv(lightPosition, "lightPos");
 		shader->AddUniformVector3fv(cameraPosition, "cameraPos");
 	}
 
 	glm::mat4 CreatePerspectiveMatrix(GLFWwindow* window)
 	{
+		if (!window)
+			return glm::mat4(1);
+
 		int FrameBufferWidth = 0, FrameBufferHeight = 0;
 		glfwGetFramebufferSize(window, &FrameBufferWidth, &FrameBufferHeight);
 
@@ -41,6 +47,9 @@ public:
 
 	void CreateViewMatrix(Shader* shader)
 	{
+		if (!shader)
+			return;
+		 
 		// View matrix definition
 		glm::vec3 CameraUpVector(0.f, 1.f, 0.f); // generic up vector
 		glm::vec3 CameraFrontVector(0.f, 0.f, -1.f); // Bu CGI definition, camera looks at negative Z axis
@@ -53,6 +62,9 @@ public:
 
 	void UpdatePerspectiveMatrix(GLFWwindow* window, Shader* shader)
 	{
+		if (!window || !shader)
+			return;
+
 		ProjectionMatrix = CreatePerspectiveMatrix(window);
 		shader->AddUniformMatrix4fv(ProjectionMatrix, "ProjectionMatrix");
 	}

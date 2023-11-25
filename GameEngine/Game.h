@@ -87,9 +87,6 @@ private:
 
 	void ResetScreen();
 	
-	/**
-		List of meshes placed in the world
-	*/
 	std::vector<Mesh*> Meshes;
 
 	std::vector<Shader*> Shaders;

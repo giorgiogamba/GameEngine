@@ -17,6 +17,9 @@ public:
 
 	Mesh(Primitive* Primitive)
 	{
+		if (!Primitive)
+			return;
+
 		this->Primitive = Primitive;
 
 		position = glm::vec3(0.f);
@@ -37,6 +40,9 @@ public:
 
 	void Update(GLFWwindow* window, Shader* shader)
 	{
+		if (!window || !shader)
+			return;
+
 		UpdateInput(window);
 		CreateModelMatrix();
 		shader->AddUniformMatrix4fv(modelMatrix, "ModelMatrix");
@@ -78,6 +84,9 @@ private:
 
 	void UpdateInput(GLFWwindow* window)
 	{
+		if (!window)
+			return;
+
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		{
 			position.z -= 0.005f;

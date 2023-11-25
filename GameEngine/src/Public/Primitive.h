@@ -18,6 +18,9 @@ public:
 
 	void Initialize(Vertex* vertices, const unsigned NumVertices, GLuint* indices, const unsigned NumIndices)
 	{
+		if (!vertices || !indices)
+			return;
+
 		for (size_t i = 0; i < NumVertices; i++)
 		{
 			this->vertices.push_back(vertices[i]);
