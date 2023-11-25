@@ -25,8 +25,8 @@ public:
 	Vertex* GetVertices() { return this->vertices.data(); }
 	GLuint* GetIndices() { return this->indices.data(); }
 
-	unsigned GetNumVertices() const { return this->vertices.size(); }
-	unsigned GetNumIndices() const { return this->indices.size(); }
+	size_t GetNumVertices() const { return this->vertices.size(); }
+	size_t GetNumIndices() const { return this->indices.size(); }
 
 protected:
 
