@@ -10,3 +10,5 @@
 
 #define VERTEXSHADERPATH	"shaders/vertex_shader.glsl"
 #define FRAGMENTSHADERPATH	"shaders/fragment_shader.glsl"
+
+#define WINDOWNAME "GameEngine"

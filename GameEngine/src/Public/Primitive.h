@@ -1,6 +1,13 @@
+// Copyright Giorgio Gamba
+
+#pragma region Includes
+
 #pragma once
 
 #include <vector>
+#include "Utils.h"
+
+#pragma endregion
 
 class Primitive
 {
@@ -11,6 +18,9 @@ public:
 
 	void Initialize(Vertex* vertices, const unsigned NumVertices, GLuint* indices, const unsigned NumIndices)
 	{
+		if (!vertices || !indices)
+			return;
+
 		for (size_t i = 0; i < NumVertices; i++)
 		{
 			this->vertices.push_back(vertices[i]);
@@ -25,10 +35,10 @@ public:
 	Vertex* GetVertices() { return this->vertices.data(); }
 	GLuint* GetIndices() { return this->indices.data(); }
 
-	unsigned GetNumVertices() const { return this->vertices.size(); }
-	unsigned GetNumIndices() const { return this->indices.size(); }
+	size_t GetNumVertices() const { return this->vertices.size(); }
+	size_t GetNumIndices() const { return this->indices.size(); }
 
-private:
+protected:
 
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;

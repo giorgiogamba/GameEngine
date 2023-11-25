@@ -31,22 +31,13 @@
 #include "src/Public/Mesh.h"
 #include "src/Public/Primitive.h"
 
+#include "Game.h"
+
 #include "src/Config/Configuration.h"
 
 #pragma endregion
 
 #pragma endregion
-
-void SetupRendering()
-{
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glFrontFace(GL_CCW);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-}
 
 void glDebugOutput(GLenum source,
     GLenum type,
@@ -95,118 +86,22 @@ void glDebugOutput(GLenum source,
     std::cout << std::endl;
 }
 
-void SetupEngineVersion(const int OpenGLMinVersion, const int OpenGLMajVersion, const bool bResizable)
-{
-    
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OpenGLMajVersion);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OpenGLMinVersion);
-    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, bResizable);
-}
-
-GLFWwindow* CreateWindow(const char* WindowTitle)
-{
-    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WindowTitle, NULL, NULL);
-    if (!window)
-    {
-        std::cout << "Unable to create OpenGL window" << std::endl;
-        glfwTerminate();
-        return nullptr;
-    }
-
-    return window;
-}
-
-GLFWwindow* SetupEngine(const char* WindowTitle, const int OpenGLMinVersion, const int OpenGLMajVersion, const bool bResizable)
-{
-    SetupEngineVersion(OpenGLMinVersion, OpenGLMajVersion, bResizable);
-
-    if (!glfwInit())
-    {
-        std::cout << "Error while initializing GLFW" << std::endl;
-        return nullptr;
-    }
-
-    GLFWwindow* window = CreateWindow(WindowTitle);
-    if (!window)
-        return nullptr;
-
-
-    glfwMakeContextCurrent(window);
-
-    glewExperimental = GL_TRUE;
-    if (glewInit() != GLEW_OK)
-    {
-        std::cout << "Error while initializing glew" << std::endl;
-        return nullptr;
-    }
-
-    return window;
-}
-
-void ResetScreen()
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-}
-
 int main(void)
 {
-    GLFWwindow* window = SetupEngine("Game Engine", OPENGLMAJVERSION, OPENGLMINVERSION, RESIZABLE);
-    if (!window)
-    {
-        std::cout << "Unable to create the window" << std::endl;
-        return -1;
-    }
-    
-    SetupRendering();
+    Game Game;
 
     /*glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     glDebugMessageCallback(glDebugOutput, nullptr);
+    glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
     glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);*/
 
-    Shader shader(VERTEXSHADERPATH, FRAGMENTSHADERPATH);
-    Material material(glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f));
-    material.ApplyToShader(&shader);
-
-    Quad quad;
-    
-    // Vertex Array
-    Mesh mesh(&quad);
-    Texture texture("Textures/cat.png");
-    
-    Camera camera;
-    camera.AddToShader(&shader);
-    camera.UpdatePerspectiveMatrix(window, &shader);
-    camera.CreateViewMatrix(&shader);
-
     // Rendering loop
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(Game.GetWindow()))
     {
-        glfwPollEvents();
-
-        camera.UpdatePerspectiveMatrix(window, &shader);
-        mesh.Update(window, &shader);
-
-        ResetScreen();
-
-        // Render
-        shader.use();
-        texture.ApplyTexture(shader.GetID());
-
-        mesh.Draw();
-
-        glfwSwapBuffers(window);
-        glFlush();
-
-        // Reset state
-        glBindVertexArray(0);
-        shader.unuse();
-        texture.unuse();
+        Game.Update();
+        Game.Render();
     }
 
-    glfwTerminate();
     return 0;
 }
