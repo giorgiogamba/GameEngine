@@ -22,9 +22,13 @@ public:
 
 		this->Primitive = Primitive;
 
-		position = glm::vec3(0.f);
-		rotation = glm::vec3(0.f);
-		scale = glm::vec3(1.f);
+		this->VAO = 0;
+		this->VBO = 0;
+		this->EBO = 0;
+
+		this->position = glm::vec3(0.f);
+		this->rotation = glm::vec3(0.f);
+		this->scale = glm::vec3(1.f);
 
 		InitVAO();
 		EnableVertexPointer();
