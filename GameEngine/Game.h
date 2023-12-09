@@ -77,6 +77,14 @@ public:
 
 	void Update();
 
+	void UpdateMouseInput();
+
+	void UpdateDeltaTime();
+
+	void MaybeCloseWindow();
+
+	void GetMovementDirection();
+
 	void Render();
 
 	void Reset();
@@ -96,6 +104,26 @@ private:
 	std::vector<Texture*> Textures;
 
 	std::vector<Camera*> Cameras;
+
+#pragma region MouseInput
+
+	double LastMouseX;
+	double LastMouseY;
+	double MouseX;
+	double MouseY;
+	double MouseOffsetX;
+	double MouseOffsetY;
+	bool FirstMouse;
+
+#pragma endregion
+
+#pragma region Delta Time
+
+	float DeltaTime;
+	float CurrTime;
+	float LastTime;
+
+#pragma endregion
 
 #pragma endregion
 };
