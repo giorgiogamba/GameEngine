@@ -101,6 +101,7 @@ int main(void)
     {
         Game.Update();
         Game.Render();
+        Game.Reset();
     }
 
     return 0;

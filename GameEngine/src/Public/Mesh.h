@@ -22,9 +22,13 @@ public:
 
 		this->Primitive = Primitive;
 
-		position = glm::vec3(0.f);
-		rotation = glm::vec3(0.f);
-		scale = glm::vec3(1.f);
+		this->VAO = 0;
+		this->VBO = 0;
+		this->EBO = 0;
+
+		this->position = glm::vec3(0.f);
+		this->rotation = glm::vec3(0.f);
+		this->scale = glm::vec3(1.f);
 
 		InitVAO();
 		EnableVertexPointer();
@@ -47,7 +51,7 @@ public:
 		if (!window || !shader)
 			return;
 
-		UpdateInput(window);
+		//UpdateInput(window);
 		CreateModelMatrix();
 		shader->AddUniformMatrix4fv(modelMatrix, "ModelMatrix");
 	}
@@ -94,36 +98,35 @@ private:
 		glBindVertexArray(0);
 	}
 
-	void UpdateInput(GLFWwindow* window)
-	{
-		if (!window)
-			return;
-
-		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		{
-			position.z -= 0.005f;
-		}
-		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		{
-			position.z += 0.005f;
-		}
-		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		{
-			position.x -= 0.005f;
-		}
-		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		{
-			position.x += 0.005f;
-		}
-		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-		{
-			rotation.y -= 0.05f;
-		}
-		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-		{
-			rotation.y += 0.05f;
-		}
-	}
+	//void UpdateInput(GLFWwindow* window)
+	//{
+	//	if (!window)
+	//		return;
+	//	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	//	{
+	//		position.z -= 0.005f;
+	//	}
+	//	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	//	{
+	//		position.z += 0.005f;
+	//	}
+	//	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	//	{
+	//		position.x -= 0.005f;
+	//	}
+	//	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	//	{
+	//		position.x += 0.005f;
+	//	}
+	//	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+	//	{
+	//		rotation.y -= 0.05f;
+	//	}
+	//	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+	//	{
+	//		rotation.y += 0.05f;
+	//	}
+	//}
 
 	void InitVAO()
 	{

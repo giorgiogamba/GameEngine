@@ -23,6 +23,18 @@
 
 Game::Game()
 {
+    this->DeltaTime = 0;
+    this->CurrTime = 0;
+    this->LastTime = 0;
+
+    this->LastMouseX = 0.0;
+    this->LastMouseY = 0.0;
+    this->MouseX = 0.0;
+    this->MouseY = 0.0;
+    this->MouseOffsetX = 0.0;
+    this->MouseOffsetY = 0.0;
+    this->FirstMouse = true;
+
 	Init();
 }
 
@@ -86,15 +98,8 @@ void Game::InitCamera()
     if (!CurrShader || !Window)
         return;
 
-    Camera NewCamera;
-    Cameras.push_back(&NewCamera);
-
-    if (Cameras.size() == 0)
-        return;
-
-    Cameras[0]->AddToShader(CurrShader);
-    Cameras[0]->UpdatePerspectiveMatrix(Window, CurrShader);
-    Cameras[0]->CreateViewMatrix(CurrShader);
+    Cameras.push_back(new Camera(glm::vec3(0.f, 0.f, 2.f), glm::vec3(1.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f)));
+    Cameras[0]->Initialize(Window, CurrShader);
 }
 
 void Game::InitShaders()
@@ -181,6 +186,8 @@ void Game::SetupRendering()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+    glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 #pragma endregion
@@ -192,6 +199,13 @@ void Game::Update()
     if (!Window)
         return;
 
+    glfwPollEvents();
+
+    MaybeCloseWindow();
+    UpdateDeltaTime();
+    UpdateMouseInput();
+    GetMovementDirection();
+
     for (Mesh* Mesh : Meshes)
     {
         Shader* CurrShader = Shaders[0];
@@ -200,16 +214,32 @@ void Game::Update()
 
         Mesh->Update(Window, Shaders[0]);
     }
+}
 
-    glfwPollEvents();
+void Game::UpdateDeltaTime()
+{
+    CurrTime = static_cast<float>(glfwGetTime()); // Evaluate if use static cast
+    DeltaTime = CurrTime - LastTime;
+    LastTime = static_cast<float>(CurrTime);
 
-    for (Shader* Shader : Shaders)
+    //std::cout << "Delta Time " << DeltaTime << std::endl;
+}
+
+void Game::UpdateMouseInput()
+{
+    glfwGetCursorPos(Window, &this->MouseX, &this->MouseY);
+    if (this->FirstMouse) // Initialization
     {
-        if (!Shader)
-            continue;
-
-        Cameras[0]->UpdatePerspectiveMatrix(Window, Shader);
+        this->LastMouseX = this->MouseX;
+        this->LastMouseY = this->MouseY;
+        this->FirstMouse = false;
     }
+
+    this->MouseOffsetX = this->MouseX - this->LastMouseX;
+    this->MouseOffsetY = this->MouseY - this->LastMouseY;
+
+    this->LastMouseX = this->MouseX;
+    this->LastMouseY = this->MouseY;
 }
 
 void Game::Render()
@@ -268,6 +298,46 @@ void Game::ResetScreen()
 void Game::AddMesh(Mesh* InMesh)
 {
     Meshes.push_back(InMesh);
+}
+
+void Game::GetMovementDirection()
+{
+    Directions CurrDirection = NONE;
+
+    if (glfwGetKey(Window, GLFW_KEY_W) == GLFW_PRESS)
+    {
+        CurrDirection = FORWARD;
+    }
+    if (glfwGetKey(Window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        CurrDirection = BACKWARD;
+    }
+    if (glfwGetKey(Window, GLFW_KEY_A) == GLFW_PRESS)
+    {
+        CurrDirection = RIGHTWARD;
+    }
+    if (glfwGetKey(Window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        CurrDirection = LEFTWARD;
+    }
+    if (glfwGetKey(Window, GLFW_KEY_C) == GLFW_PRESS)
+    {
+        CurrDirection = UPWARD;
+    }
+    if (glfwGetKey(Window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    {
+        CurrDirection = DOWNWARD;
+    }
+
+    Cameras[0]->Update(Window, Shaders[0], DeltaTime, MouseOffsetX, MouseOffsetY, CurrDirection);
+}
+
+void Game::MaybeCloseWindow()
+{
+    if (glfwGetKey(Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
+        glfwSetWindowShouldClose(Window, GLFW_TRUE);
+    }
 }
 
 #pragma endregion
