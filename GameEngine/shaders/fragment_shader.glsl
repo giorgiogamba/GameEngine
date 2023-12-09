@@ -18,7 +18,7 @@ uniform sampler2D texture;
 uniform Material material;
 
 uniform vec3 lightPos;
-uniform vec3 cameraPos;
+uniform vec3 cameraPosition;
 
 vec3 computeDiffuseLightning()
 {
@@ -31,7 +31,7 @@ vec3 computeSpecularLightning()
 {
 	vec3 lightToPosDir = normalize(vs_position - lightPos);
 	vec3 reflectLightToPosDir = normalize(reflect(lightToPosDir, normalize(vs_normal)));
-	vec3 posToViewDir = normalize(vec3(cameraPos - vs_position));
+	vec3 posToViewDir = normalize(vec3(cameraPosition - vs_position));
 	float specularConstant = pow(max(dot(posToViewDir, reflectLightToPosDir), 0), 35);
 	return material.specularColor * specularConstant;
 }
