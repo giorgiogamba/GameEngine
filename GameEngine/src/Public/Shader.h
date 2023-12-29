@@ -150,8 +150,6 @@ public:
         unuse();
     }
 
-    
-
     void use()
     {
         glUseProgram(ID);
