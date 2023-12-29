@@ -125,6 +125,21 @@ public:
 		}
 	}
 
+	void Move(const glm::vec3& Movement)
+	{
+		this->position += Movement;
+	}
+
+	void Rotate(const glm::vec3& Rotation)
+	{
+		this->rotation += Rotation;
+	}
+
+	void Scale(const glm::vec3 Scale)
+	{
+		this->scale += Scale;
+	}
+
 private:
 
 	void InitializeMesh(Vertex* VertexArray, const unsigned& NumVertices, GLuint* IndicesArray, const unsigned& NumIndices)
@@ -221,6 +236,10 @@ private:
 	GLuint* GetIndicesArray() const { return IndicesArray; }
 	const unsigned GetNumVertices() const { return NumVertices; }
 	const unsigned GetNumIndices() const { return NumIndices; }
+
+	glm::vec3 GetPosition() const { return position; }
+	glm::vec3 GetRotation() const { return rotation; }
+	glm::vec3 GetScale() const { return scale; }
 
 	Primitive* Primitive;
 
