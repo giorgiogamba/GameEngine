@@ -39,8 +39,6 @@ public:
 
 	~Material() {}
 
-private:
-
 	void ApplyToShader(Shader* shader)
 	{
 		if (!shader)
@@ -50,6 +48,8 @@ private:
 		shader->AddUniformVector3fv(diffuseColor, "material.diffuseColor");
 		shader->AddUniformVector3fv(specularColor, "material.specularColor");
 	}
+
+private:
 
 	glm::vec3 ambientColor;
 	glm::vec3 diffuseColor;
