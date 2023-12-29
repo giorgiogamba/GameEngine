@@ -14,6 +14,7 @@
 #include "src/Public/Material.h"
 #include "src/Public/Primitive.h"
 #include "src/Public/Mesh.h"
+#include "Model.h"
 #include "src/Public/Texture.h"
 #include "src/Public/Camera.h"
 
@@ -44,7 +45,7 @@ Game::~Game()
     glfwTerminate();
 
     // Delete all the structures
-    for (std::vector<Mesh*>::iterator it = Meshes.begin(); it < Meshes.end(); it++)
+    for (std::vector<Model*>::iterator it = Models.begin(); it < Models.end(); it++)
     {
         if (!*it)
             continue;
@@ -86,10 +87,10 @@ void Game::Init()
 void Game::InitGameElements()
 {
     InitShaders();
-    InitMeshes();
     InitMaterials();
     InitTextures();
     InitCamera();
+    InitModels();
 }
 
 void Game::InitCamera()
@@ -120,9 +121,19 @@ void Game::InitMaterials()
     this->Materials.push_back(new Material(glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), Shaders[0]));
 }
 
-void Game::InitMeshes()
+void Game::InitModels()
 {
-    Meshes.push_back(new Mesh(new /*Quad()*/ Pyramid()));
+    std::vector<Mesh*> Meshes;
+    Meshes.push_back(new Mesh(new Pyramid()));
+    Models.push_back(new Model("Pyr1", glm::vec3(0.f, 0.f, 0.f), Materials[0], Textures[0], Meshes));
+
+
+    //for (Mesh* Mesh : Meshes)
+    //{
+    //    delete Mesh;
+    //}
+
+    //this->Meshes.clear();
 }
 
 #pragma endregion
@@ -206,13 +217,12 @@ void Game::Update()
     UpdateMouseInput();
     GetMovementDirection();
 
-    for (Mesh* Mesh : Meshes)
+    for (Model* Model : Models)
     {
-        Shader* CurrShader = Shaders[0];
-        if (!CurrShader || !Mesh)
+        if (!Model)
             continue;
 
-        Mesh->Update(Window, Shaders[0]);
+        Model->Update(Window, Shaders[0]);
     }
 }
 
@@ -256,12 +266,12 @@ void Game::Render()
         Texture->ApplyTexture(Shaders[0]->GetID());
     }
 
-    for (Mesh* Mesh : Meshes)
+    for (Model* Model : Models)
     {
-        if (!Mesh)
+        if (!Model)
             continue;
 
-        Mesh->Draw();
+        Model->Render(Shaders[0]);
     }
 
     glfwSwapBuffers(Window);
@@ -293,11 +303,6 @@ void Game::ResetScreen()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-}
-
-void Game::AddMesh(Mesh* InMesh)
-{
-    Meshes.push_back(InMesh);
 }
 
 void Game::GetMovementDirection()

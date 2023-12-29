@@ -23,11 +23,11 @@
 class Shader;
 class Material;
 class Mesh;
+class Model;
 class Texture;
 class Camera;
 
 #pragma endregion
-
 
 class Game
 {
@@ -49,6 +49,7 @@ private:
 	void InitTextures();
 	void InitMaterials();
 	void InitMeshes();
+	void InitModels();
 	void InitCamera();
 
 #pragma endregion
@@ -89,13 +90,11 @@ public:
 
 	void Reset();
 
-	void AddMesh(Mesh* InMesh);
-
 private:
 
 	void ResetScreen();
-	
-	std::vector<Mesh*> Meshes;
+
+	std::vector<Model*> Models;
 
 	std::vector<Shader*> Shaders;
 
