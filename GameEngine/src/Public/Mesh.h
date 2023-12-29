@@ -30,11 +30,63 @@ public:
 		this->rotation = glm::vec3(0.f);
 		this->scale = glm::vec3(1.f);
 
-		InitVAO();
-		EnableVertexPointer();
-		CreateModelMatrix();
+		InitializeMesh(Primitive->GetVertices(), Primitive->GetNumVertices(), Primitive->GetIndices(), Primitive->GetNumIndices());
 	}
 
+	Mesh( Vertex* VertexArray
+		, const unsigned& NumVertices
+		, GLuint* IndicesArray
+		, const unsigned& NumIndices
+		, const glm::vec3& Position
+		, const glm::vec3 Rotation
+		, const glm::vec3& Scale )
+	{
+		this->NumVertices = NumVertices;
+		this->NumIndices = NumIndices;
+
+		this->VertexArray = new Vertex[this->NumVertices];
+		for (size_t i = 0; i < this->NumVertices; i++)
+		{
+			this->VertexArray[i] = VertexArray[i];
+		}
+
+		this->IndicesArray = new GLuint[this->NumIndices];
+		for (size_t i = 0; i < this->NumIndices; i++)
+		{
+			this->IndicesArray[i] = IndicesArray[i];
+		}
+
+		this->position = Position;
+		this->rotation = Rotation;
+		this->scale = Scale;
+
+		InitializeMesh(VertexArray, NumVertices, IndicesArray, NumIndices);
+	}
+
+	Mesh(const Mesh& obj)
+	{
+		this->NumVertices = obj.GetNumVertices();
+		this->NumIndices = obj.GetNumIndices();
+
+		this->VertexArray = new Vertex[this->NumVertices];
+		for (size_t i = 0; i < this->NumVertices; i++)
+		{
+			this->VertexArray[i] = obj.GetVertexArray()[i];
+		}
+
+		this->IndicesArray = new GLuint[this->NumIndices];
+		for (size_t i = 0; i < this->NumIndices; i++)
+		{
+			this->IndicesArray[i] = obj.GetIndicesArray()[i];
+		}
+
+		this->position = obj.GetPosition();
+		this->rotation = obj.GetRotation();
+		this->scale = obj.GetScale();
+
+		InitializeMesh(VertexArray, NumVertices, IndicesArray, NumIndices);
+	}
+		
 	~Mesh()
 	{
 		glDeleteVertexArrays(1, &VAO);
@@ -44,6 +96,9 @@ public:
 		{
 			glDeleteBuffers(1, &EBO);
 		}
+
+		delete[] this->VertexArray;
+		delete[] this->IndicesArray;
 	}
 
 	void Update(GLFWwindow* window, Shader* shader)
@@ -71,6 +126,13 @@ public:
 	}
 
 private:
+
+	void InitializeMesh(Vertex* VertexArray, const unsigned& NumVertices, GLuint* IndicesArray, const unsigned& NumIndices)
+	{
+		InitVAO(VertexArray, NumVertices, IndicesArray, NumIndices);
+		EnableVertexPointer();
+		CreateModelMatrix();
+	}
 
 	void EnableVertexPointer()
 	{
@@ -128,20 +190,20 @@ private:
 	//	}
 	//}
 
-	void InitVAO()
+	void InitVAO(Vertex* VertexArray, const unsigned& NumVertices, GLuint* IndicesArray, const unsigned& NumIndices)
 	{
 		glGenVertexArrays(1, &VAO);
 		glBindVertexArray(VAO);
 
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * Primitive->GetNumVertices(), Primitive->GetVertices(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * NumVertices, VertexArray, GL_STATIC_DRAW);
 
 		if (Primitive->GetNumVertices() > 0)
 		{
 			glGenBuffers(1, &EBO);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * Primitive->GetNumIndices(), Primitive->GetIndices(), GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * NumIndices, IndicesArray, GL_STATIC_DRAW);
 		}
 	}
 
@@ -155,6 +217,11 @@ private:
 		modelMatrix = glm::scale(modelMatrix, scale);
 	}
 
+	Vertex* GetVertexArray() const { return VertexArray; }
+	GLuint* GetIndicesArray() const { return IndicesArray; }
+	const unsigned GetNumVertices() const { return NumVertices; }
+	const unsigned GetNumIndices() const { return NumIndices; }
+
 	Primitive* Primitive;
 
 	GLuint VAO;
@@ -166,4 +233,9 @@ private:
 	glm::vec3 scale;
 
 	glm::mat4 modelMatrix;
+
+	Vertex* VertexArray;
+	unsigned int NumVertices;
+	GLuint* IndicesArray;
+	unsigned int NumIndices;
 };
