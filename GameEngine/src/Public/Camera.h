@@ -33,7 +33,7 @@ public:
 		this->Yaw = -90.f;
 		
 		this->Speed = 5.f;
-		this->Sensitivity = 3.f;
+		this->Sensitivity = 30.f;
 
 		this->ProjectionMatrix = glm::mat4(1);
 	}
