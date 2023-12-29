@@ -2,6 +2,8 @@
 
 #pragma once
 
+#pragma region Types
+
 enum Directions
 {
 	NONE = 0,
@@ -12,6 +14,8 @@ enum Directions
 	UPWARD,
 	DOWNWARD
 };
+
+#pragma endregion
 
 class Camera
 {
