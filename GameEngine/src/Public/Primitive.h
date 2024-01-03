@@ -5,7 +5,8 @@
 #pragma once
 
 #include <vector>
-#include "Utils.h"
+
+#include "Vertex.h"
 
 #pragma endregion
 

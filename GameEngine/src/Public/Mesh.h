@@ -6,7 +6,7 @@
 
 #include "Shader.h"
 #include "Primitive.h"
-#include "Utils.h"
+#include "Vertex.h"
 
 #pragma endregion
 

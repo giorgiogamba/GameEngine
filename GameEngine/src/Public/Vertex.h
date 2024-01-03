@@ -4,10 +4,6 @@
 
 #include <glm/glm.hpp>
 
-#pragma region Definitions
-
-#pragma endregion
-
 struct Vertex
 {
     glm::vec3 position;
