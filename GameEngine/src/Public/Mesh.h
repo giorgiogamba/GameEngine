@@ -92,7 +92,7 @@ public:
 		glDeleteVertexArrays(1, &VAO);
 		glDeleteBuffers(1, &VBO);
 
-		if (Primitive->GetNumVertices() > 0)
+		if (GetNumVertices() > 0)
 		{
 			glDeleteBuffers(1, &EBO);
 		}
