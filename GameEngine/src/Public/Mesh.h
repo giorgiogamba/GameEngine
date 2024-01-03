@@ -115,13 +115,27 @@ public:
 	{
 		glBindVertexArray(VAO);
 
-		if (Primitive->GetNumIndices() == 0)
+		if (Primitive)
 		{
-			glDrawArrays(GL_TRIANGLES, 0, (unsigned) Primitive->GetNumVertices());
+			if (Primitive->GetNumIndices() == 0)
+			{
+				glDrawArrays(GL_TRIANGLES, 0, (unsigned)Primitive->GetNumVertices());
+			}
+			else
+			{
+				glDrawElements(GL_TRIANGLES, (unsigned)Primitive->GetNumIndices(), GL_UNSIGNED_INT, 0);
+			}
 		}
 		else
 		{
-			glDrawElements(GL_TRIANGLES, (unsigned)Primitive->GetNumIndices(), GL_UNSIGNED_INT, 0);
+			if (NumIndices == 0)
+			{
+				glDrawArrays(GL_TRIANGLES, 0, (unsigned) GetNumVertices());
+			}
+			else
+			{
+				glDrawElements(GL_TRIANGLES, (unsigned) GetNumIndices(), GL_UNSIGNED_INT, 0);
+			}
 		}
 	}
 
@@ -214,7 +228,7 @@ private:
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * NumVertices, VertexArray, GL_STATIC_DRAW);
 
-		if (Primitive->GetNumVertices() > 0)
+		if (NumVertices > 0)
 		{
 			glGenBuffers(1, &EBO);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
