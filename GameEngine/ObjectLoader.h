@@ -21,6 +21,7 @@
 
 static std::vector<Vertex> LoadObject(const char* filename)
 {
+	// Atomic elements
 	std::vector<glm::vec3> Positions;
 	std::vector<glm::vec2> TextureCoords;
 	std::vector<glm::vec3> Normals;
@@ -67,6 +68,54 @@ static std::vector<Vertex> LoadObject(const char* filename)
 			ss >> Normal.x >> Normal.y >> Normal.z;
 			Normals.push_back(Normal);
 		}
+		else if (prefix == "f")
+		{
+			int counter = 0;
+			GLuint TempGLuint = 0;
+			while (ss >> TempGLuint)
+			{
+				if (counter == 0) // Vertex
+				{
+					Positions_Indices.push_back(TempGLuint);
+				}
+				else if (counter == 1)
+				{
+					TextureCoords_Indices.push_back(TempGLuint);
+				}
+				else if (counter == 2)
+				{
+					Normals_Indices.push_back(TempGLuint);
+				}
+
+				if (ss.peek() == '/')
+				{
+					ss.ignore(1, '/');
+					counter++;
+				}
+				else if (ss.peek() == ' ')
+				{
+					ss.ignore(1, ' ');
+					counter++;
+				}
+
+				if (counter > 2)
+					counter = 0;
+			}
+		}
+		else
+		{
+
+		}
+	}
+
+	// Build vertices array
+	Vertices.resize(Positions_Indices.size(), Vertex()); // Fill with empty Vertices
+	for (size_t i = 0; i < Vertices.size(); ++i)
+	{
+		Vertices[i].position = Positions[Positions_Indices[i] - 1];
+		Vertices[i].texcoord = TextureCoords[TextureCoords_Indices[i] - 1];
+		Vertices[i].normal = Normals[Normals_Indices[i] - 1];
+		Vertices[i].color = glm::vec3(1.f, 1.f, 1.f);
 	}
 
 	// Summary
