@@ -17,6 +17,7 @@
 #include "Model.h"
 #include "src/Public/Texture.h"
 #include "src/Public/Camera.h"
+#include "ObjectLoader.h"
 
 #pragma endregion
 
@@ -124,8 +125,12 @@ void Game::InitMaterials()
 void Game::InitModels()
 {
     std::vector<Mesh*> Meshes;
-    Meshes.push_back(new Mesh(new Pyramid()));
-    Models.push_back(new Model("Pyr1", glm::vec3(0.f, 0.f, 0.f), Materials[0], Textures[0], Meshes));
+    std::vector<Vertex> Cube = LoadObject("obj_files/cube.obj");
+    Meshes.push_back(new Mesh(Cube.data(), Cube.size(), NULL, 0/*, glm::vec3(1.f, 0.f, 0.f)*/, glm::vec3(0.f), glm::vec3(0.f), glm::vec3(1.f)));
+
+    //Meshes.push_back(new Mesh(new Pyramid()));
+    //Models.push_back(new Model("Pyr1", glm::vec3(0.f, 0.f, 0.f), Materials[0], Textures[0], Meshes));
+    Models.push_back(new Model("CubeObject", glm::vec3(0.f, 0.f, 1.f), Materials[0], Textures[0], Meshes));
 
 
     //for (Mesh* Mesh : Meshes)
