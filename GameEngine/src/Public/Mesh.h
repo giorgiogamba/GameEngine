@@ -106,7 +106,6 @@ public:
 		if (!window || !shader)
 			return;
 
-		//UpdateInput(window);
 		CreateModelMatrix();
 		shader->AddUniformMatrix4fv(modelMatrix, "ModelMatrix");
 	}
