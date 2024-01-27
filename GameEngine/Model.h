@@ -27,14 +27,15 @@ public:
 		, Material(InMaterial)
 		, OverrideTextureDiffuse(InOverrideTextureDiffuse)
 	{
+		int MeshCounter = 0;
 		for (Mesh* InMesh : InMeshes)
 		{
-			Meshes.push_back(InMesh);
-		}
+			if (!InMesh)
+				continue;
 
-		for (Mesh* Mesh : Meshes)
-		{
-			Mesh->Move(InPosition);
+			// Model's meshes own the same name with a incrementing suffix
+			InMesh->SetName(InName + "_" + std::to_string(MeshCounter));
+			Meshes.push_back(InMesh);
 		}
 	}
 

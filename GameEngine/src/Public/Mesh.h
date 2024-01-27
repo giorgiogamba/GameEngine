@@ -154,6 +154,9 @@ public:
 		this->scale += Scale;
 	}
 
+	void SetName(const std::string& InName) { Name = InName; }
+	std::string GetName() const { return Name; }
+
 private:
 
 	void InitializeMesh(Vertex* VertexArray, const unsigned& NumVertices, GLuint* IndicesArray, const unsigned& NumIndices)
@@ -271,4 +274,6 @@ private:
 	unsigned int NumVertices;
 	GLuint* IndicesArray;
 	unsigned int NumIndices;
+
+	std::string Name;
 };
