@@ -221,6 +221,19 @@ void Game::Update()
     UpdateDeltaTime();
     UpdateMouseInput();
     GetMovementDirection();
+    glFlush();
+
+    ResetScreen();
+
+
+    for (Texture* Texture : Textures)
+    {
+        Shader* CurrShader = Shaders[0];
+        if (!CurrShader || !Texture)
+            continue;
+
+        CurrShader->use();
+        Texture->ApplyTexture(Shaders[0]->GetID());
 
     for (Model* Model : Models)
     {
@@ -228,6 +241,7 @@ void Game::Update()
             continue;
 
         Model->Update(Window, Shaders[0]);
+        Model->Render(Shaders[0]);
     }
 }
 
@@ -259,9 +273,9 @@ void Game::UpdateMouseInput()
 
 void Game::Render()
 {
-    ResetScreen();
+    /*ResetScreen();*/
 
-    for (Texture* Texture : Textures)
+    /*for (Texture* Texture : Textures)
     {
         Shader* CurrShader = Shaders[0];
         if (!CurrShader || !Texture)
@@ -269,18 +283,17 @@ void Game::Render()
 
         CurrShader->use();
         Texture->ApplyTexture(Shaders[0]->GetID());
-    }
+    }*/
 
-    for (Model* Model : Models)
+    /*for (Model* Model : Models)
     {
         if (!Model)
             continue;
 
         Model->Render(Shaders[0]);
-    }
+    }*/
 
     glfwSwapBuffers(Window);
-    glFlush();
 }
 
 void Game::Reset()
