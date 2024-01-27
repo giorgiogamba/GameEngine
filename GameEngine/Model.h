@@ -48,8 +48,6 @@ public:
 
 	void Update(GLFWwindow* Window, Shader* Shader)
 	{
-		Rotate(glm::vec3(0.f, 0.1f, 0.f));
-
 		for (Mesh* Mesh : Meshes)
 		{
 			if (!Mesh)
