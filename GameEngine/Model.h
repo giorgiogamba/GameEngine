@@ -70,10 +70,8 @@ public:
 			if (!Mesh)
 				continue;
 
-			Mesh->Draw();
+			Mesh->Draw(Shader);
 		}
-
-		UpdateUniforms(Shader);
 	}
 
 	void UpdateUniforms(Shader* Shader)

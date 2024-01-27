@@ -111,8 +111,9 @@ public:
 		shader->AddUniformMatrix4fv(modelMatrix, "ModelMatrix");
 	}
 
-	void Draw()
+	void Draw(Shader* Shader)
 	{
+		Shader->use();
 		glBindVertexArray(VAO);
 
 		if (Primitive)
@@ -137,6 +138,8 @@ public:
 				glDrawElements(GL_TRIANGLES, (unsigned) GetNumIndices(), GL_UNSIGNED_INT, 0);
 			}
 		}
+		glBindVertexArray(0);
+		glUseProgram(0);
 	}
 
 	void Move(const glm::vec3& Movement)
