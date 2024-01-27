@@ -64,6 +64,8 @@ public:
 		if (!Shader)
 			return;
 
+		//UpdateUniforms(Shader); // White screen problems
+
 		for (Mesh* Mesh : Meshes)
 		{
 			if (!Mesh)
