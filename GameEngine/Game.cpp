@@ -234,6 +234,7 @@ void Game::Update()
 
         CurrShader->use();
         Texture->ApplyTexture(Shaders[0]->GetID());
+    }
 
     for (Model* Model : Models)
     {
