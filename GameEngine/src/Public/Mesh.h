@@ -194,36 +194,6 @@ private:
 		glBindVertexArray(0);
 	}
 
-	//void UpdateInput(GLFWwindow* window)
-	//{
-	//	if (!window)
-	//		return;
-	//	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-	//	{
-	//		position.z -= 0.005f;
-	//	}
-	//	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-	//	{
-	//		position.z += 0.005f;
-	//	}
-	//	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-	//	{
-	//		position.x -= 0.005f;
-	//	}
-	//	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-	//	{
-	//		position.x += 0.005f;
-	//	}
-	//	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-	//	{
-	//		rotation.y -= 0.05f;
-	//	}
-	//	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-	//	{
-	//		rotation.y += 0.05f;
-	//	}
-	//}
-
 	void InitVAO(Vertex* VertexArray, const unsigned& NumVertices, GLuint* IndicesArray, const unsigned& NumIndices)
 	{
 		glGenVertexArrays(1, &VAO);
