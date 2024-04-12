@@ -309,13 +309,14 @@ void Game::Reset()
         Shader->unuse();
     }
 
-    for (Texture* Texture : Textures)
+    // If active, removes multiple textures instancing
+    /*for (Texture* Texture : Textures)
     {
         if (!Texture)
             continue;
 
         Texture->unuse();
-    }
+    }*/
 }
 
 void Game::ResetScreen()
