@@ -31,7 +31,7 @@
 #include "src/Public/Mesh.h"
 #include "src/Public/Primitive.h"
 
-#include "Game.h"
+#include "src/Public/Game.h"
 
 #include "src/Config/Configuration.h"
 

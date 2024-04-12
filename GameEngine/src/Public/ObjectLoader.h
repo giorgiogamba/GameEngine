@@ -10,7 +10,7 @@
 #include <sstream>
 #include <iostream>
 
-#include "src/Public/Vertex.h"
+#include "Public/Vertex.h"
 
 #pragma endregion
 

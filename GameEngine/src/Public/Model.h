@@ -6,9 +6,9 @@
 
 #include <vector>
 
-#include "src/Public/Material.h"
-#include "src/Public/Texture.h"
-#include "src/Public/Mesh.h"
+#include "Public/Material.h"
+#include "Public/Texture.h"
+#include "Public/Mesh.h"
 
 #pragma endregion
 

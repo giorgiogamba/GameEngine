@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include "Game.h"
+#include "Public/Game.h"
 
 #include <iostream>
 #include <GL/glew.h>
 
-#include "src/Config/Configuration.h"
+#include "Config/Configuration.h"
 #include "src/Public/Shader.h"
 #include "src/Public/Material.h"
 #include "src/Public/Primitive.h"

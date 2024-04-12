@@ -76,13 +76,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Programming\OpenGLTemplate\include;C:/Programming/OpenGLTemplate/include/GLFW</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\GGAMBA\source\Linking\include;C:\Users\GGAMBA\source\GameEngine\GameEngine\src;C:\Programming\OpenGLTemplate\include;C:/Programming/OpenGLTemplate/include/GLFW</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Programming\OpenGLTemplate\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);glfw3.lib;glew32.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\GGAMBA\source\Linking\libs;C:\Programming\OpenGLTemplate\lib;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);glfw3.lib;glew32.lib;opengl32.lib;soil2.lib;soil2-debug.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -93,15 +93,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Programming\OpenGLTemplate\include;C:/Programming/OpenGLTemplate/include/GLFW</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\GGAMBA\source\Linking\include;C:\Users\GGAMBA\source\GameEngine\GameEngine\src;C:\Programming\OpenGLTemplate\include;C:/Programming/OpenGLTemplate/include/GLFW</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Programming\OpenGLTemplate\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);glfw3.lib;glew32.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\GGAMBA\source\Linking\libs;C:\Programming\OpenGLTemplate\lib;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);glfw3.lib;glew32.lib;opengl32.lib;soil2.lib;soil2-debug.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -110,13 +110,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Programming\OpenGLTemplate\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\GGAMBA\source\Linking\include;C:\Users\GGAMBA\source\GameEngine\GameEngine\src;C:\Users\GGAMBA\source\GameEngine\GameEngine\src;C:\Users\GGAMBA\source\GameEngine\GameEngine\src;C:\Users\GGAMBA\source\Linking\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Programming\OpenGLTemplate\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);glfw3.lib;glew32.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\GGAMBA\source\Linking\libs;C:\Programming\OpenGLTemplate\lib;C:\Users\GGAMBA\source\Linking\libs</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);glfw3.lib;glew32.lib;opengl32.lib;soil2.lib;soil2-debug.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -127,22 +127,44 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Programming\OpenGLTemplate\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\GGAMBA\source\Linking\include;C:\Users\GGAMBA\source\GameEngine\GameEngine\src;C:\Users\GGAMBA\source\GameEngine\GameEngine\src;C:\Programming\OpenGLTemplate\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Programming\OpenGLTemplate\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);glfw3.lib;glew32.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\GGAMBA\source\Linking\libs;C:\Programming\OpenGLTemplate\lib;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);glfw3.lib;glew32.lib;opengl32.lib;soil2.lib;soil2-debug.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\Private\Game.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="ObjectLoader.h" />
+    <ClInclude Include="src\Config\Configuration.h" />
+    <ClInclude Include="src\Public\Camera.h" />
+    <ClInclude Include="src\Public\Game.h" />
+    <ClInclude Include="src\Public\Material.h" />
+    <ClInclude Include="src\Public\Mesh.h" />
+    <ClInclude Include="src\Public\Model.h" />
+    <ClInclude Include="src\Public\ObjectLoader.h" />
+    <ClInclude Include="src\Public\Primitive.h" />
+    <ClInclude Include="src\Public\Shader.h" />
+    <ClInclude Include="src\Public\Texture.h" />
+    <ClInclude Include="src\Public\Vertex.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\fragment_shader.glsl" />
+    <None Include="shaders\vertex_shader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Textures\cat.png" />
+    <Image Include="Textures\tex1.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
