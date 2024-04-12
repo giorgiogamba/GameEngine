@@ -1,7 +1,7 @@
 //Copyright Giorgio Gamba
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#define SCREEN_WIDTH 1080
+#define SCREEN_HEIGHT 920
 
 #define RESIZABLE true
 
