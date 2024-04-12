@@ -13,6 +13,8 @@
 class Mesh
 {
 
+#pragma region Lifecycle
+
 public:
 
 	Mesh(Primitive* Primitive)
@@ -141,6 +143,12 @@ public:
 		glUseProgram(0);
 	}
 
+#pragma endregion
+
+#pragma region Transforms
+
+public:
+
 	void Move(const glm::vec3& Movement)
 	{
 		this->position += Movement;
@@ -156,8 +164,32 @@ public:
 		this->scale += Scale;
 	}
 
+	glm::vec3 GetPosition() const { return position; }
+	glm::vec3 GetRotation() const { return rotation; }
+	glm::vec3 GetScale() const { return scale; }
+
+private:
+
+	glm::vec3 position;
+	glm::vec3 rotation;
+	glm::vec3 scale;
+
+#pragma endregion
+
+#pragma region General Information
+
+public:
+
 	void SetName(const std::string& InName) { Name = InName; }
 	std::string GetName() const { return Name; }
+
+private:
+
+	std::string Name;
+
+#pragma endregion
+
+#pragma region Rendering
 
 private:
 
@@ -226,19 +258,11 @@ private:
 	const unsigned GetNumVertices() const { return NumVertices; }
 	const unsigned GetNumIndices() const { return NumIndices; }
 
-	glm::vec3 GetPosition() const { return position; }
-	glm::vec3 GetRotation() const { return rotation; }
-	glm::vec3 GetScale() const { return scale; }
-
 	Primitive* Primitive;
 
 	GLuint VAO;
 	GLuint VBO;
 	GLuint EBO;
-
-	glm::vec3 position;
-	glm::vec3 rotation;
-	glm::vec3 scale;
 
 	glm::mat4 modelMatrix;
 
@@ -247,5 +271,6 @@ private:
 	GLuint* IndicesArray;
 	unsigned int NumIndices;
 
-	std::string Name;
+#pragma endregion
+
 };
