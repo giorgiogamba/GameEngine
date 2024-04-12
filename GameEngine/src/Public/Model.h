@@ -37,6 +37,8 @@ public:
 			InMesh->SetName(InName + "_" + std::to_string(MeshCounter));
 			Meshes.push_back(InMesh);
 		}
+
+		Move(Position);
 	}
 
 	~Model()
