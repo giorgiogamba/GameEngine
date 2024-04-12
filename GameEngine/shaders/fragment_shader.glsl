@@ -14,7 +14,7 @@ in vec3 vs_normal;
 
 out vec4 fs_color;
 
-uniform sampler2D texture;
+uniform sampler2D tex;
 uniform Material material;
 
 uniform vec3 lightPos;
@@ -38,7 +38,7 @@ vec3 computeSpecularLightning()
 
 void main()
 {
-	fs_color = texture(texture, vs_texcoord)
+	fs_color = texture(tex, vs_texcoord)
 			 * vec4(vs_color, 1.f)
 			 * (vec4(material.ambientColor, 1.f) + vec4(computeDiffuseLightning(), 1.f) + vec4(computeSpecularLightning(), 1.f));
 }
