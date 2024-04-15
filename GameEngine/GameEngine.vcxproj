@@ -142,6 +142,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Private\Game.cpp" />
     <ClCompile Include="src\Public\Mesh.cpp" />
+    <ClCompile Include="src\Private\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
