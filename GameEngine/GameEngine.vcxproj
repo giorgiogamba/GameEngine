@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Private\Game.cpp" />
+    <ClCompile Include="src\Public\Mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
