@@ -15,6 +15,8 @@
 class Model
 {
 
+#pragma region Lifecycle
+
 public:
 
 	Model ( std::string InName
@@ -48,6 +50,18 @@ public:
 			delete Mesh;
 		}
 	}
+
+private:
+
+	std::string Name;
+
+	std::vector<Mesh*> Meshes;
+
+#pragma endregion
+
+#pragma region Render
+
+public:
 
 	void Update(GLFWwindow* Window, Shader* Shader)
 	{
@@ -86,6 +100,18 @@ public:
 		OverrideTextureDiffuse->unuse();
 	}
 
+private:
+
+	Material* Material;
+
+	Texture* OverrideTextureDiffuse;
+
+#pragma endregion
+
+#pragma region Transforms
+
+public:
+
 	void Move(const glm::vec3& Movement)
 	{
 		for (Mesh* Mesh : Meshes)
@@ -121,10 +147,8 @@ public:
 
 private:
 
-	std::string Name;
-
-	Material* Material;
-	Texture* OverrideTextureDiffuse;
-	std::vector<Mesh*> Meshes;
 	glm::vec3 Position;
+
+#pragma endregion
+
 };
