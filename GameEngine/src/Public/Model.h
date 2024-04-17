@@ -24,8 +24,6 @@ public:
 	{
 		this->Name = InName;
 
-		Move(Position);
-
 		this->Material = InMaterial;
 		this->OverrideTextureDiffuse = InOverrideTextureDiffuse;
 		this->Meshes = InMeshes;
@@ -40,6 +38,8 @@ public:
 			InMesh->SetName(InName + "_" + std::to_string(MeshCounter));
 			Meshes.push_back(InMesh);
 		}
+
+		Move(InPosition);
 	}
 
 	~Model();
