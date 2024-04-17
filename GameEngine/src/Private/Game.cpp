@@ -112,6 +112,7 @@ void Game::InitShaders()
 void Game::InitTextures()
 {
     this->Textures.push_back(new Texture("Textures/cat.png"));
+    this->Textures.push_back(new Texture("Textures/tex1.jpg"));
 }
 
 void Game::InitMaterials()
@@ -134,7 +135,7 @@ void Game::InitModels()
     
     std::vector<Mesh*> Meshes;
     Meshes.push_back(new Mesh(new Quad()));
-    Models.push_back(new Model("CubeObject", glm::vec3(1.f, 0.f, 0.f), Materials[0], Textures[0], Meshes));
+    Models.push_back(new Model("CubeObject", glm::vec3(1.f, 0.f, 0.f), Materials[0], Textures[1], Meshes));
 
 	std::vector<Mesh*> Meshes3;
 	Meshes3.push_back(new Mesh(new Triangle()));
