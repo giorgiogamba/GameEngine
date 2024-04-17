@@ -42,7 +42,7 @@ void Model::Render(Shader * Shader)
 	if (!Shader)
 		return;
 
-	//UpdateUniforms(Shader); // White screen problems
+	UpdateUniforms(Shader);
 
 	for (Mesh* Mesh : Meshes)
 	{
@@ -59,8 +59,10 @@ void Model::UpdateUniforms(Shader* Shader)
 		return;
 
 	Material->ApplyToShader(Shader);
+	Shader->use();
 	OverrideTextureDiffuse->ApplyTexture(Shader->GetID());
-	OverrideTextureDiffuse->unuse();
+	//OverrideTextureDiffuse->unuse();
+	Shader->unuse();
 }
 
 #pragma endregion
