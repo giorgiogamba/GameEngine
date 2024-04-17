@@ -1,6 +1,6 @@
-// Copyright (c) 34BigThings, S.r.l. All rights reserved.
+// Copyright (c) Giorgio Gamba
 
-#include "Mesh.h"
+#include "Public/Mesh.h"
 
 #pragma region Lifecycle
 
