@@ -6,11 +6,12 @@
 
 #include <vector>
 
-#include "Public/Material.h"
-#include "Public/Texture.h"
 #include "Public/Mesh.h"
 
 #pragma endregion
+
+class Texture;
+class Material;
 
 class Model
 {
@@ -19,16 +20,16 @@ class Model
 
 public:
 
-	Model ( std::string InName
-		, const glm::vec3& InPosition
-		, Material* InMaterial
-		, Texture* InOverrideTextureDiffuse
-		, const std::vector<Mesh*> InMeshes )
-		: Name(InName)
-		, Position(InPosition)
-		, Material(InMaterial)
-		, OverrideTextureDiffuse(InOverrideTextureDiffuse)
+	Model(std::string InName, const glm::vec3& InPosition, Material* InMaterial, Texture* InOverrideTextureDiffuse, const std::vector<Mesh*> InMeshes)
 	{
+		this->Name = InName;
+
+		Move(Position);
+
+		this->Material = InMaterial;
+		this->OverrideTextureDiffuse = InOverrideTextureDiffuse;
+		this->Meshes = InMeshes;
+
 		int MeshCounter = 0;
 		for (Mesh* InMesh : InMeshes)
 		{
@@ -39,17 +40,9 @@ public:
 			InMesh->SetName(InName + "_" + std::to_string(MeshCounter));
 			Meshes.push_back(InMesh);
 		}
-
-		Move(Position);
 	}
 
-	~Model()
-	{
-		for (Mesh*& Mesh : Meshes)
-		{
-			delete Mesh;
-		}
-	}
+	~Model();
 
 private:
 
@@ -63,42 +56,11 @@ private:
 
 public:
 
-	void Update(GLFWwindow* Window, Shader* Shader)
-	{
-		for (Mesh* Mesh : Meshes)
-		{
-			if (!Mesh)
-				continue;
+	void Update(GLFWwindow* Window, Shader* Shader);
 
-			Mesh->Update(Window, Shader);
-		}
-	}
+	void Render(Shader* Shader);
 
-	void Render(Shader* Shader)
-	{
-		if (!Shader)
-			return;
-
-		//UpdateUniforms(Shader); // White screen problems
-
-		for (Mesh* Mesh : Meshes)
-		{
-			if (!Mesh)
-				continue;
-
-			Mesh->Draw(Shader);
-		}
-	}
-
-	void UpdateUniforms(Shader* Shader)
-	{
-		if (!Shader)
-			return;
-
-		Material->ApplyToShader(Shader);
-		OverrideTextureDiffuse->ApplyTexture(Shader->GetID());
-		OverrideTextureDiffuse->unuse();
-	}
+	void UpdateUniforms(Shader* Shader);
 
 private:
 
@@ -112,38 +74,11 @@ private:
 
 public:
 
-	void Move(const glm::vec3& Movement)
-	{
-		for (Mesh* Mesh : Meshes)
-		{
-			if (!Mesh)
-				continue;
+	void Move(const glm::vec3& Movement);
 
-			Mesh->Move(Movement);
-		}
-	}
+	void Rotate(const glm::vec3& Rotation);
 
-	void Rotate(const glm::vec3& Rotation)
-	{
-		for (Mesh* Mesh : Meshes)
-		{
-			if (!Mesh)
-				continue;
-
-			Mesh->Rotate(Rotation);
-		}
-	}
-
-	void Scale(const glm::vec3& Scale)
-	{
-		for (Mesh* Mesh : Meshes)
-		{
-			if (!Mesh)
-				continue;
-
-			Mesh->Scale(Scale);
-		}
-	}
+	void Scale(const glm::vec3& Scale);
 
 private:
 
