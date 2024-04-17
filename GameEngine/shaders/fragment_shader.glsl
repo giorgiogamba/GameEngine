@@ -38,7 +38,5 @@ vec3 computeSpecularLightning()
 
 void main()
 {
-	fs_color = texture(tex, vs_texcoord)
-			 * vec4(vs_color, 1.f)
-			 * (vec4(material.ambientColor, 1.f) + vec4(computeDiffuseLightning(), 1.f) + vec4(computeSpecularLightning(), 1.f));
+	fs_color = texture(tex, vs_texcoord) * (vec4(material.ambientColor, 1.f) + vec4(computeDiffuseLightning(), 1.f) + vec4(computeSpecularLightning(), 1.f));
 }
