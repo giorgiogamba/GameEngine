@@ -13,6 +13,8 @@
 class Mesh
 {
 
+#pragma region Lifecycle
+
 public:
 
 	Mesh(Primitive* Primitive)
@@ -101,174 +103,67 @@ public:
 		delete[] this->IndicesArray;
 	}
 
-	void Update(GLFWwindow* window, Shader* shader)
-	{
-		if (!window || !shader)
-			return;
+	void Update(GLFWwindow* window, Shader* shader);
 
-		CreateModelMatrix();
-		shader->AddUniformMatrix4fv(modelMatrix, "ModelMatrix");
-	}
+	void Draw(Shader* Shader);
 
-	void Draw(Shader* Shader)
-	{
-		Shader->use();
-		glBindVertexArray(VAO);
+#pragma endregion
 
-		if (Primitive)
-		{
-			if (Primitive->GetNumIndices() == 0)
-			{
-				glDrawArrays(GL_TRIANGLES, 0, (unsigned)Primitive->GetNumVertices());
-			}
-			else
-			{
-				glDrawElements(GL_TRIANGLES, (unsigned)Primitive->GetNumIndices(), GL_UNSIGNED_INT, 0);
-			}
-		}
-		else
-		{
-			if (NumIndices == 0)
-			{
-				glDrawArrays(GL_TRIANGLES, 0, (unsigned) GetNumVertices());
-			}
-			else
-			{
-				glDrawElements(GL_TRIANGLES, (unsigned) GetNumIndices(), GL_UNSIGNED_INT, 0);
-			}
-		}
-		glBindVertexArray(0);
-		glUseProgram(0);
-	}
+#pragma region Transforms
 
-	void Move(const glm::vec3& Movement)
-	{
-		this->position += Movement;
-	}
+public:
 
-	void Rotate(const glm::vec3& Rotation)
-	{
-		this->rotation += Rotation;
-	}
+	void Move(const glm::vec3& Movement) { this->position += Movement; }
+	void Rotate(const glm::vec3& Rotation) { this->rotation += Rotation; }
+	void Scale(const glm::vec3 Scale) { this->scale += Scale; }
 
-	void Scale(const glm::vec3 Scale)
-	{
-		this->scale += Scale;
-	}
+	glm::vec3 GetPosition() const { return position; }
+	glm::vec3 GetRotation() const { return rotation; }
+	glm::vec3 GetScale() const { return scale; }
+
+private:
+
+	glm::vec3 position;
+	glm::vec3 rotation;
+	glm::vec3 scale;
+
+#pragma endregion
+
+#pragma region General Information
+
+public:
 
 	void SetName(const std::string& InName) { Name = InName; }
 	std::string GetName() const { return Name; }
 
 private:
 
-	void InitializeMesh(Vertex* VertexArray, const unsigned& NumVertices, GLuint* IndicesArray, const unsigned& NumIndices)
-	{
-		InitVAO(VertexArray, NumVertices, IndicesArray, NumIndices);
-		EnableVertexPointer();
-		CreateModelMatrix();
-	}
+	std::string Name;
 
-	void EnableVertexPointer()
-	{
-		int PointerIndex = 0;
+#pragma endregion
 
-		// Position coordinates
-		glVertexAttribPointer(PointerIndex, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, position));
-		glEnableVertexAttribArray(PointerIndex);
+#pragma region Rendering
 
-		// Rotation coordinates
-		PointerIndex++;
-		glVertexAttribPointer(PointerIndex, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, color));
-		glEnableVertexAttribArray(PointerIndex);
+private:
 
-		// Texture coordinates
-		PointerIndex++;
-		glVertexAttribPointer(PointerIndex, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, texcoord));
-		glEnableVertexAttribArray(PointerIndex);
+	void InitializeMesh(Vertex* VertexArray, const unsigned& NumVertices, GLuint* IndicesArray, const unsigned& NumIndices);
 
-		// Normal vector
-		PointerIndex++;
-		glVertexAttribPointer(PointerIndex, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, normal));
-		glEnableVertexAttribArray(PointerIndex);
+	void EnableVertexPointer();
 
-		glBindVertexArray(0);
-	}
+	void InitVAO(Vertex* VertexArray, const unsigned& NumVertices, GLuint* IndicesArray, const unsigned& NumIndices);
 
-	//void UpdateInput(GLFWwindow* window)
-	//{
-	//	if (!window)
-	//		return;
-	//	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-	//	{
-	//		position.z -= 0.005f;
-	//	}
-	//	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-	//	{
-	//		position.z += 0.005f;
-	//	}
-	//	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-	//	{
-	//		position.x -= 0.005f;
-	//	}
-	//	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-	//	{
-	//		position.x += 0.005f;
-	//	}
-	//	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-	//	{
-	//		rotation.y -= 0.05f;
-	//	}
-	//	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-	//	{
-	//		rotation.y += 0.05f;
-	//	}
-	//}
-
-	void InitVAO(Vertex* VertexArray, const unsigned& NumVertices, GLuint* IndicesArray, const unsigned& NumIndices)
-	{
-		glGenVertexArrays(1, &VAO);
-		glBindVertexArray(VAO);
-
-		glGenBuffers(1, &VBO);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * NumVertices, VertexArray, GL_STATIC_DRAW);
-
-		if (NumVertices > 0)
-		{
-			glGenBuffers(1, &EBO);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * NumIndices, IndicesArray, GL_STATIC_DRAW);
-		}
-	}
-
-	void CreateModelMatrix()
-	{
-		modelMatrix = glm::mat4(1.f); // Creates a diagonal identity matrix
-		modelMatrix = glm::translate(modelMatrix, position);
-		modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.x), glm::vec3(1.f, 0.f, 0.f)); // Rotation on the X axis
-		modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.y), glm::vec3(0.f, 1.f, 0.f)); // Rotation on the Y axis
-		modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.z), glm::vec3(0.f, 0.f, 1.f)); // Rotation on the Z axis
-		modelMatrix = glm::scale(modelMatrix, scale);
-	}
+	void CreateModelMatrix();
 
 	Vertex* GetVertexArray() const { return VertexArray; }
 	GLuint* GetIndicesArray() const { return IndicesArray; }
 	const unsigned GetNumVertices() const { return NumVertices; }
 	const unsigned GetNumIndices() const { return NumIndices; }
 
-	glm::vec3 GetPosition() const { return position; }
-	glm::vec3 GetRotation() const { return rotation; }
-	glm::vec3 GetScale() const { return scale; }
-
 	Primitive* Primitive;
 
 	GLuint VAO;
 	GLuint VBO;
 	GLuint EBO;
-
-	glm::vec3 position;
-	glm::vec3 rotation;
-	glm::vec3 scale;
 
 	glm::mat4 modelMatrix;
 
@@ -277,5 +172,6 @@ private:
 	GLuint* IndicesArray;
 	unsigned int NumIndices;
 
-	std::string Name;
+#pragma endregion
+
 };

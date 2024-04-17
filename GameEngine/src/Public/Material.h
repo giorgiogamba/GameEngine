@@ -19,6 +19,8 @@
 #include <gl/GLU.h>
 #include <SOIL2/SOIL2.h>
 
+#include "Shader.h"
+
 #pragma endregion
 
 class Material

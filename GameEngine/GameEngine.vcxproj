@@ -141,6 +141,12 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Private\Game.cpp" />
+    <ClCompile Include="src\Private\Mesh.cpp" />
+    <ClCompile Include="src\Private\Model.cpp" />
+    <ClCompile Include="src\Private\Primitive.cpp" />
+    <ClCompile Include="src\Private\Shader.cpp" />
+    <ClCompile Include="src\Private\Texture.cpp" />
+    <ClCompile Include="src\Private\Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
