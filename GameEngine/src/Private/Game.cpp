@@ -261,15 +261,6 @@ void Game::UpdateMouseInput()
 void Game::Render()
 {
     ResetScreen();
-	for (Texture* Texture : Textures)
-	{
-		Shader* CurrShader = Shaders[0];
-		if (!CurrShader || !Texture)
-			continue;
-
-		CurrShader->use();
-		Texture->ApplyTexture(Shaders[0]->GetID());
-	}
 
     for (Model* Model : Models)
     {
