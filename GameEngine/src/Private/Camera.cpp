@@ -1,4 +1,4 @@
-// Copyright (c) 34BigThings, S.r.l. All rights reserved.
+// Copyright Giorgio Gamba
 
 #pragma region Includes
 
