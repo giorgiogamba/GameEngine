@@ -1,6 +1,6 @@
 // Copyright Giorgio Gamba
 
-#include "Material.h"
+#include "Public/Material.h"
 
 void Material::ApplyToShader(Shader* shader)
 {
