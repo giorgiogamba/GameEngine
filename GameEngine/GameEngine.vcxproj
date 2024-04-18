@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Private\Game.cpp" />
+    <ClCompile Include="src\Private\Material.cpp" />
     <ClCompile Include="src\Private\Mesh.cpp" />
     <ClCompile Include="src\Private\Model.cpp" />
     <ClCompile Include="src\Private\Primitive.cpp" />

@@ -41,16 +41,8 @@ public:
 
 	~Material() {}
 
-	void ApplyToShader(Shader* shader)
-	{
-		if (!shader)
-			return;
-
-		shader->AddUniformVector3fv(ambientColor, "material.ambientColor");
-		shader->AddUniformVector3fv(diffuseColor, "material.diffuseColor");
-		shader->AddUniformVector3fv(specularColor, "material.specularColor");
-	}
-
+	void ApplyToShader(Shader* shader);
+	
 private:
 
 	glm::vec3 ambientColor;
