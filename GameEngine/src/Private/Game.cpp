@@ -141,6 +141,12 @@ void Game::InitModels()
 	Meshes3.push_back(new Mesh(new Triangle()));
 	Models.push_back(new Model("CubeObject", glm::vec3(-1.f, 0.f, 0.f), Materials[0], Textures[0], Meshes3));
 
+    std::vector<Mesh*> FloorMeshes;
+    FloorMeshes.push_back(new Mesh(new Quad()));
+    Models.push_back(new Model("Floor", glm::vec3(0.f, 0.f, 0.f), Materials[0], Textures[0], FloorMeshes));
+    Models[3]->Move(glm::vec3(0.f, -0.5f, 0.f));
+    Models[3]->Scale(glm::vec3(10.f, 10.f, 0.f));
+    Models[3]->Rotate(glm::vec3(-45.f, 0.f, 0.f));
 
     //for (Mesh* Mesh : Meshes)
     //{
