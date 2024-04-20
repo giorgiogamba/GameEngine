@@ -36,7 +36,14 @@ vec3 computeSpecularLightning()
 	return material.specularColor * specularConstant;
 }
 
+float computeAttenuation()
+{
+	float distance = length(lightPos - vs_position);
+	float attenuation = 1.f / (1.f * 0.045f * distance * 0.0075f * (distance * distance));
+	return attenuation;
+}
+
 void main()
 {
-	fs_color = texture(tex, vs_texcoord) * (vec4(material.ambientColor, 1.f) + vec4(computeDiffuseLightning(), 1.f) + vec4(computeSpecularLightning(), 1.f));
+	fs_color = (texture(tex, vs_texcoord) * (vec4(material.ambientColor, 1.f) + vec4(computeDiffuseLightning(), 1.f) + vec4(computeSpecularLightning(), 1.f))) * computeAttenuation();
 }
