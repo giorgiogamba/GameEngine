@@ -18,6 +18,7 @@
 #include "Public/Texture.h"
 #include "Public/Camera.h"
 #include "Public/ObjectLoader.h"
+#include "Public/Light.h"
 
 #pragma endregion
 
@@ -150,6 +151,11 @@ void Game::InitModels()
 
 }
 
+void Game::InitLights()
+{
+    Lights.push_back(new PointLight(glm::vec3(0.f)));
+}
+
 #pragma endregion
 
 #pragma region Window
@@ -262,6 +268,11 @@ void Game::UpdateMouseInput()
 void Game::Render()
 {
     ResetScreen();
+
+    for (Light* Light : Lights)
+    {
+        Light->ApplyToShader(Shaders[0]);
+    }
 
     for (Model* Model : Models)
     {

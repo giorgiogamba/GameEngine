@@ -26,6 +26,7 @@ class Mesh;
 class Model;
 class Texture;
 class Camera;
+class Light;
 
 #pragma endregion
 
@@ -48,6 +49,7 @@ private:
 	void InitShaders();
 	void InitTextures();
 	void InitMaterials();
+	void InitLights();
 	void InitMeshes();
 	void InitModels();
 	void InitCamera();
@@ -103,6 +105,8 @@ private:
 	std::vector<Texture*> Textures;
 
 	std::vector<Camera*> Cameras;
+
+	std::vector<Light*> Lights;
 
 #pragma region MouseInput
 
