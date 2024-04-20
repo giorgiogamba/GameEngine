@@ -113,6 +113,7 @@ void Game::InitTextures()
 {
     this->Textures.push_back(new Texture("Textures/cat.png"));
     this->Textures.push_back(new Texture("Textures/tex1.jpg"));
+    this->Textures.push_back(new Texture("Textures/skybox.png"));
 }
 
 void Game::InitMaterials()
@@ -140,6 +141,10 @@ void Game::InitModels()
 	std::vector<Mesh*> Meshes3;
 	Meshes3.push_back(new Mesh(new Triangle()));
 	Models.push_back(new Model("CubeObject", glm::vec3(-1.f, 0.f, 0.f), Materials[0], Textures[0], Meshes3));
+
+    std::vector<Mesh*> Meshes4;
+    Meshes4.push_back(new Mesh(new Quad()));
+    Skybox = new Model("Skybox", glm::vec3(0.f, 0.f, 2.f), Materials[0], Textures[2], Meshes4);
 
 
     //for (Mesh* Mesh : Meshes)
@@ -262,6 +267,9 @@ void Game::UpdateMouseInput()
 void Game::Render()
 {
     ResetScreen();
+
+    // Render the skybox first for depth test disabling
+    Skybox->Render(Shaders[0]);
 
     for (Model* Model : Models)
     {

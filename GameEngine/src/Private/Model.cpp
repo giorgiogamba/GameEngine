@@ -44,6 +44,9 @@ void Model::Render(Shader * Shader)
 
 	UpdateUniforms(Shader);
 
+	if (Name == "Skybox")
+		glDisable(GL_DEPTH_TEST);
+
 	for (Mesh* Mesh : Meshes)
 	{
 		if (!Mesh)
@@ -51,6 +54,9 @@ void Model::Render(Shader * Shader)
 
 		Mesh->Draw(Shader);
 	}
+
+	if (Name == "Skybox")
+		glEnable(GL_DEPTH_TEST);
 }
 
 void Model::UpdateUniforms(Shader* Shader)

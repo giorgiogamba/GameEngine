@@ -104,6 +104,8 @@ private:
 
 	std::vector<Camera*> Cameras;
 
+	Model* Skybox;
+
 #pragma region MouseInput
 
 	double LastMouseX;
