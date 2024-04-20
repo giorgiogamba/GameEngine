@@ -148,12 +148,6 @@ void Game::InitModels()
     Models[3]->Scale(glm::vec3(10.f, 10.f, 0.f));
     Models[3]->Rotate(glm::vec3(-45.f, 0.f, 0.f));
 
-    //for (Mesh* Mesh : Meshes)
-    //{
-    //    delete Mesh;
-    //}
-
-    //this->Meshes.clear();
 }
 
 #pragma endregion
