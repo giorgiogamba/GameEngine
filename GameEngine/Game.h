@@ -15,6 +15,7 @@
 #include <GL/GL.h>
 #include <gl/GLU.h>
 #include <SOIL2/SOIL2.h>
+#include "Light.h"
 
 #pragma endregion
 
@@ -26,6 +27,7 @@ class Mesh;
 class Model;
 class Texture;
 class Camera;
+class Light;
 
 #pragma endregion
 
@@ -51,6 +53,12 @@ private:
 	void InitMeshes();
 	void InitModels();
 	void InitCamera();
+	void InitLight();
+	void InitPointLights();
+	void UpdatePointLights();
+	void InitSkybox();
+
+	Model* SkyboxModel;
 
 #pragma endregion
 
@@ -104,6 +112,8 @@ private:
 
 	std::vector<Camera*> Cameras;
 
+	std::vector<PointLight*> PointLights;
+
 #pragma region MouseInput
 
 	double LastMouseX;
@@ -122,7 +132,10 @@ private:
 	float CurrTime;
 	float LastTime;
 
+	float TimeAccuracy;
+
 #pragma endregion
 
 #pragma endregion
+
 };

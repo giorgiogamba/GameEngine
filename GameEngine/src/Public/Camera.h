@@ -42,6 +42,11 @@ public:
 		this->ProjectionMatrix = glm::mat4(1);
 	}
 
+	~Camera()
+	{
+		
+	}
+
 	void Initialize(GLFWwindow* Window, Shader* Shader)
 	{
 		if (!Window || !Shader)
@@ -61,6 +66,7 @@ public:
 		UpdateKeyboardInput(DeltaTime, Direction);
 		UpdateViewMatrix(Shader);
 		Shader->AddUniformVector3fv(this->Position, "cameraPosition");
+		Shader->AddUniformVector3fv(this->lightPosition, "lightPos");
 	}
 
 	void UpdateMouseInput(const float DeltaTime, const double MouseOffsetX, const double MouseOffsetY)
@@ -155,6 +161,13 @@ public:
 		const glm::mat4& ViewMatrix = glm::lookAt(this->Position, this->Position + this->FrontVector, this->UpVector);
 		Shader->AddUniformMatrix4fv(ViewMatrix, "ViewMatrix");
 	}
+
+	void RefreshLightPosition()
+	{
+		lightPosition = Position;
+	}
+
+	glm::vec3 GetPosition() const { return this->Position; }
 
 private:
 	

@@ -150,6 +150,13 @@ public:
         unuse();
     }
 
+    void AddUniformF(const float InValue, const GLchar* VarName)
+    {
+        use();
+        glUniform1f(glGetUniformLocation(ID, VarName), InValue);
+        unuse();
+    }
+
     void use()
     {
         glUseProgram(ID);

@@ -105,6 +105,38 @@ public:
 
 };
 
+class Cube : public Primitive
+{
+
+public:
+
+	Cube() : Primitive()
+	{
+		Vertex vertices[] =
+		{
+			glm::vec3(0.0f, 0.0f, 0.0f),		glm::vec3(1.0f, 0.0f, 0.0f),    glm::vec2(0.5f, 1.0f), glm::vec3(0.f, 0.f, 1.f),
+			glm::vec3(0.0f, 1.0f, 0.0f),      glm::vec3(0.0f, 1.0f, 0.0f),    glm::vec2(0.0f, 0.0f), glm::vec3(0.f, 0.f, 1.f),
+			glm::vec3(0.0f, 0.0f, 1.0f),       glm::vec3(0.0f, 0.0f, 1.0f),    glm::vec2(1.0f, 0.0f), glm::vec3(0.f, 0.f, 1.f),
+
+			glm::vec3(0.0f, 0.0f, 1.0f),		glm::vec3(1.0f, 1.0f, 0.0f),    glm::vec2(0.5f, 1.0f), glm::vec3(-1.f, 0.f, 0.f),
+			glm::vec3(0.0f, 1.0f, 0.0f),     glm::vec3(0.0f, 0.0f, 1.0f),    glm::vec2(0.0f, 0.0f), glm::vec3(-1.f, 0.f, 0.f),
+			glm::vec3(1.0f, 1.0f, 0.0f),      glm::vec3(0.0f, 0.0f, 1.0f),    glm::vec2(1.0f, 0.0f), glm::vec3(-1.f, 0.f, 0.f),
+
+			glm::vec3(0.0f, 0.5f, 0.0f),		glm::vec3(1.0f, 1.0f, 0.0f),    glm::vec2(0.5f, 1.0f), glm::vec3(0.f, 0.f, -1.f),
+			glm::vec3(0.5f, -0.5f, -0.5f),      glm::vec3(0.0f, 0.0f, 1.0f),    glm::vec2(0.0f, 0.0f), glm::vec3(0.f, 0.f, -1.f),
+			glm::vec3(-0.5f, -0.5f, -0.5f),     glm::vec3(0.0f, 0.0f, 1.0f),    glm::vec2(1.0f, 0.0f), glm::vec3(0.f, 0.f, -1.f),
+
+			glm::vec3(0.0f, 0.5f, 0.0f),		glm::vec3(1.0f, 1.0f, 0.0f),    glm::vec2(0.5f, 1.0f), glm::vec3(1.f, 0.f, 0.f),
+			glm::vec3(0.5f, -0.5f, 0.5f),		glm::vec3(0.0f, 0.0f, 1.0f),    glm::vec2(0.0f, 0.0f), glm::vec3(1.f, 0.f, 0.f),
+			glm::vec3(0.5f, -0.5f, -0.5f),      glm::vec3(0.0f, 0.0f, 1.0f),    glm::vec2(1.0f, 0.0f), glm::vec3(1.f, 0.f, 0.f),
+		};
+
+		unsigned numVertices = sizeof(vertices) / sizeof(Vertex);
+
+		Initialize(vertices, numVertices, NULL, 0);
+	}
+};
+
 class Pyramid : public Primitive
 {
 public:

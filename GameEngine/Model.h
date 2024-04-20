@@ -41,7 +41,7 @@ public:
 
 	~Model()
 	{
-		for (Mesh*& Mesh : Meshes)
+		for (Mesh* Mesh : Meshes)
 		{
 			delete Mesh;
 		}

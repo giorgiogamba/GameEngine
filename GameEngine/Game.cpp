@@ -18,6 +18,8 @@
 #include "src/Public/Texture.h"
 #include "src/Public/Camera.h"
 #include "ObjectLoader.h"
+#include "Light.h"
+#include "PhysicsEngine.h"
 
 #pragma endregion
 
@@ -77,6 +79,14 @@ Game::~Game()
 
         delete* it;
     }
+
+    for (std::vector<PointLight*>::iterator it = PointLights.begin(); it < PointLights.end(); it++)
+    {
+        if (!*it)
+            continue;
+
+        delete* it;
+    }
 }
 
 void Game::Init()
@@ -92,6 +102,7 @@ void Game::InitGameElements()
     InitTextures();
     InitCamera();
     InitModels();
+    InitSkybox();
 }
 
 void Game::InitCamera()
@@ -111,9 +122,10 @@ void Game::InitShaders()
 
 void Game::InitTextures()
 {
-    this->Textures.push_back(new Texture("Textures/cat.png"));
+    this->Textures.push_back(new Texture("Textures/white.jpg"));
+    this->Textures.push_back(new Texture("Textures/sky.jpg"));
 }
-
+    
 void Game::InitMaterials()
 {
     if (!Shaders[0])
@@ -124,21 +136,80 @@ void Game::InitMaterials()
 
 void Game::InitModels()
 {
+    // Environment models
+    std::vector<Mesh*> EnvMeshes;
+    Mesh* TerrainMesh = new Mesh(new Quad());
+    TerrainMesh->Move(glm::vec3(0.f, -1.f, 0.f));
+    TerrainMesh->Rotate(glm::vec3(-90.f, 0.f, 0.f));
+    TerrainMesh->Scale(glm::vec3(10.f, 10.f, 0.f));
+    EnvMeshes.push_back(TerrainMesh);
+    Models.push_back(new Model("Terrain", glm::vec3(0.f, 0.f, 0.f), Materials[0], Textures[0], EnvMeshes));
+
+    // Models
     std::vector<Mesh*> Meshes;
-    std::vector<Vertex> Cube = LoadObject("obj_files/cube.obj");
-    Meshes.push_back(new Mesh(Cube.data(), Cube.size(), NULL, 0/*, glm::vec3(1.f, 0.f, 0.f)*/, glm::vec3(0.f), glm::vec3(0.f), glm::vec3(1.f)));
+    Meshes.push_back(new Mesh(new Pyramid()));
+    Models.push_back(new Model("Pyr1", glm::vec3(0.f, 0.f, 0.f), Materials[0], Textures[0], Meshes));
 
-    //Meshes.push_back(new Mesh(new Pyramid()));
-    //Models.push_back(new Model("Pyr1", glm::vec3(0.f, 0.f, 0.f), Materials[0], Textures[0], Meshes));
-    Models.push_back(new Model("CubeObject", glm::vec3(0.f, 0.f, 1.f), Materials[0], Textures[0], Meshes));
+    std::vector<Mesh*> Meshes2;
+    Meshes2.push_back(new Mesh(new Pyramid()));
+    Meshes2[0]->Move(glm::vec3(-3.f, 0.f, 0.f));
+    Models.push_back(new Model("Pyr2", glm::vec3(0.f, 0.f, 0.f), Materials[0], Textures[0], Meshes2));
 
+    std::vector<Mesh*> Meshes3;
+    Meshes3.push_back(new Mesh(new Pyramid()));
+    Meshes3[0]->Move(glm::vec3(3.f, 0.f, 0.f));
+    Models.push_back(new Model("Pyr3", glm::vec3(0.f, 0.f, 0.f), Materials[0], Textures[0], Meshes3));
 
-    //for (Mesh* Mesh : Meshes)
-    //{
-    //    delete Mesh;
-    //}
+    std::vector<Mesh*> Meshes4;
+    Meshes4.push_back(new Mesh(new Cube()));
+    Meshes4[0]->Move(glm::vec3(1.5f, 0.f, 0.f));
+    Models.push_back(new Model("Cube", glm::vec3(0.f, 0.f, 0.f), Materials[0], Textures[0], Meshes4));
 
-    //this->Meshes.clear();
+    //std::vector<Mesh*> CubeMeshes;
+    //Mesh CubeMesh = Mesh(new Cube());
+    //CubeMeshes.push_back(&CubeMesh);
+    //Models.push_back(new Model("PhysicsCube", glm::vec3(0.f, 0.f, 0.f), Materials[0], Textures[0], CubeMeshes));
+
+    //// Cube Physics model
+    //RigidBody CubeRigidBody;
+    //CubeRigidBody.Mesh = &CubeMesh;
+    //CubeRigidBody.X = glm::vec3(0.0f, 1.5f, 0.0f);
+    //CubeRigidBody.V = glm::vec3(1.0f, 0.0f, 1.0f);
+
+}
+
+void Game::InitLight()
+{
+    InitPointLights();
+}
+
+void Game::InitPointLights()
+{
+    PointLights.push_back(new PointLight(glm::vec3(0.f)));
+    //UpdatePointLights();
+}
+
+void Game::InitSkybox()
+{
+    // Create a cube with a big scale and set its position the same as the camera
+    std::vector<Mesh*> Skybox;
+    Skybox.push_back(new Mesh(new Cube()));
+    SkyboxModel = new Model("Skybox", glm::vec3(0.f, 0.f, 0.f), Materials[0], Textures[1], Skybox);
+    //SkyboxModel->Scale(glm::vec3(10.f, 20.f, 0.f));
+}
+
+void Game::UpdatePointLights()
+{
+    if (!Shaders.empty())
+    {
+        for (PointLight* PointLight : PointLights)
+        {
+            if (!PointLight)
+                continue;
+
+            PointLight->SendToShader(Shaders[0]);
+        }
+    }
 }
 
 #pragma endregion
@@ -221,6 +292,41 @@ void Game::Update()
     UpdateDeltaTime();
     UpdateMouseInput();
     GetMovementDirection();
+
+    /*The position of the center of mass of a body is computed through the First ORder Euler Integration,
+    which basically discretizes an integral with finite steps*/
+
+
+    // Update - This is basically a step simulation
+    // First version: directly depends on the delta time, which is the rendering time -> BAD
+    // CubeRigidBody.X += /*DeltaTime * */CubeRigidBody.V; 
+
+    // Second version: depends on a constant, in some way connected to the delta time
+    const float DeltaTimeLimit = 0.001f;
+
+    // Computation of the physics time, recorves all the overlapped time stamps is missed
+    TimeAccuracy += DeltaTime;
+    while (TimeAccuracy < DeltaTimeLimit)
+    {
+        //CubeRigidBody.X += TimeAccuracy * CubeRigidBody.V; // Velocit Update
+
+        // Rotation matrix update
+        /*Since there is not the same relationship between velocity and position (velocity is the derivative of the position)
+        while the rotation matrix is not the derivative of the angular momentum, it is necessary to find a ne relationship to connect them.
+        Supposed a point in the body rotates around Omega (which is the rotation axis in fact), it describes a circle around the axis.
+        At every time step we should find the tangent of the circle on that point, which is in fact the rotation matrix.
+        We note that the rotation matrix is perpendicular to the point, while the point itself is perpendicular to the 
+        omeega, so the rotatio matrix is perpendicular to both of them -> VECTOR CROSS PRODUCT fi we apply
+        the same operation cross product between omega and the 3 axis of the body*/
+
+        // #TODO Compute cross product
+        //CubeRigidBody.R += TimeAccuracy /** Cross(CubeRigidBody.Omega)*/ * CubeRigidBody->R;
+
+        TimeAccuracy -= DeltaTimeLimit;
+    }
+
+
+    UpdatePointLights();
     glFlush();
 
     ResetScreen();
@@ -235,6 +341,13 @@ void Game::Update()
         CurrShader->use();
         Texture->ApplyTexture(Shaders[0]->GetID());
     }
+
+    // Render skydome first
+    glFrontFace(GL_CCW);
+    glDisable(GL_DEPTH_TEST);
+    SkyboxModel->Update(Window, Shaders[0]);
+    SkyboxModel->Render(Shaders[0]);
+    glEnable(GL_DEPTH_TEST);
 
     for (Model* Model : Models)
     {
@@ -351,6 +464,16 @@ void Game::GetMovementDirection()
     if (glfwGetKey(Window, GLFW_KEY_SPACE) == GLFW_PRESS)
     {
         CurrDirection = DOWNWARD;
+    }
+    if (glfwGetKey(Window, GLFW_KEY_1) == GLFW_PRESS)
+    {
+        for (PointLight* PointLight : PointLights)
+        { 
+            if (!PointLight || !Cameras[0])
+                continue;
+
+            PointLight->SetPosition(Cameras[0]->GetPosition());
+        }
     }
 
     Cameras[0]->Update(Window, Shaders[0], DeltaTime, MouseOffsetX, MouseOffsetY, CurrDirection);
