@@ -132,4 +132,11 @@ void Shader::AddUniformVector3fv(glm::vec3 vector, const GLchar* vectorName)
 	unuse();
 }
 
+void Shader::AddUniformFloat(const float value, const GLchar* floatName)
+{
+	use();
+	glUniform1f(glGetUniformLocation(ID, floatName), value);
+	unuse();
+}
+
 #pragma endregion

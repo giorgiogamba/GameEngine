@@ -50,6 +50,8 @@ public:
 
 	void AddUniformVector3fv(glm::vec3 vector, const GLchar* vectorName);
 
+	void AddUniformFloat(const float value, const GLchar* floatName);
+
     void use() { glUseProgram(ID); }
 
     void unuse() { glUseProgram(0); }
