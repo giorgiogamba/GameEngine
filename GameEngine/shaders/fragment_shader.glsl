@@ -39,7 +39,7 @@ vec3 computeSpecularLightning()
 float computeAttenuation()
 {
 	float distance = length(lightPos - vs_position);
-	float attenuation = 1.f / (1.f * 0.045f * distance * 0.0075f * (distance * distance));
+	float attenuation = 1.f / (1.f + 0.045f * distance + 0.0075f * (distance * distance));
 	return attenuation;
 }
 
